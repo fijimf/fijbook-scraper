@@ -21,10 +21,10 @@ object Main extends IOApp {
       ce <- ExecutionContexts.fixedThreadPool[IO](32) // our connect EC
       te <- ExecutionContexts.cachedThreadPool[IO]
       xa <- HikariTransactor.newHikariTransactor[IO](
-        cf.getString("fijbook.schedule.db.driver"),
-        cf.getString("fijbook.schedule.db.url"),
-        cf.getString("fijbook.schedule.db.user"),
-        cf.getString("fijbook.schedule.db.password"),
+        cf.getString("fijbook.scraping.db.driver"),
+        cf.getString("fijbook.scraping.db.url"),
+        cf.getString("fijbook.scraping.db.user"),
+        cf.getString("fijbook.scraping.db.password"),
         ce,
         te
       )
@@ -55,7 +55,7 @@ object Main extends IOApp {
           .dataSource(dataSource)
           .locations("classpath:db/migration")
           .baselineOnMigrate(true)
-          .table("flyway_schema_history_schedule")
+          .table("flyway_schema_history_scraping")
           .load()
           .migrate()
       }

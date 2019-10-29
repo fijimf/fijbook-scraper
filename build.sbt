@@ -1,5 +1,5 @@
 val Http4sVersion = "0.20.9"
-val CirceVersion = "0.11.1"
+val CirceVersion = "0.12.0"
 val DoobieVersion = "0.7.0"
 val Specs2Version = "4.1.0"
 val LogbackVersion = "1.2.3"
@@ -20,6 +20,7 @@ lazy val root = (project in file("."))
       "org.http4s"      %% "http4s-dsl"          % Http4sVersion,
       "io.circe"        %% "circe-generic"       % CirceVersion,
       "io.circe"        %% "circe-parser"        % CirceVersion,
+      "io.circe"        %% "circe-optics"        % CirceVersion,
       "org.tpolecat"    %% "doobie-core"         % DoobieVersion,
       "org.tpolecat"    %% "doobie-postgres"     % DoobieVersion,
       "org.tpolecat"    %% "doobie-hikari"       % DoobieVersion,
@@ -31,7 +32,8 @@ lazy val root = (project in file("."))
       "org.flywaydb"    % "flyway-core"          % FlywayVersion,
       "commons-codec"   % "commons-codec"        % "1.13",
       "com.spotify"     % "docker-client"        % "8.14.0",
-      "com.amazonaws"   % "aws-java-sdk-s3"      % "1.11.651"
+      "com.amazonaws"   % "aws-java-sdk-s3"      % "1.11.651",
+      "com.fijimf.deepfij" %% "fijbook-schedule" % "1.0.0"
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.0"),

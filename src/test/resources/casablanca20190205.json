@@ -1,0 +1,1309 @@
+
+{
+  "games": [
+    {"game": {
+      "away": {
+        "conferences": [
+          {
+            "conferenceName": "Big Ten",
+            "conferenceSeo": "big-ten"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(18-5)",
+        "names": {
+          "char6": "MICHST",
+          "full": "Michigan State University",
+          "seo": "michigan-st",
+          "short": "Mich. St. "
+        },
+        "rank": "9",
+        "score": "74",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "106a4fa0-9d31-4f1f-abb5-d890c0600b39",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "Big Ten",
+          "conferenceSeo": "big-ten"
+        }],
+        "description": "(8-15)",
+        "names": {
+          "char6": "ILL",
+          "full": "University of Illinois Urbana-Champaign",
+          "seo": "illinois",
+          "short": "Illinois"
+        },
+        "rank": "",
+        "score": "79",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Illinois Michigan St.",
+      "url": "/game/basketball-men/d1/2019/02/05/michigan-st-illinois",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(12-11)",
+        "names": {
+          "char6": "MIA OH",
+          "full": "Miami University (Ohio)",
+          "seo": "miami-oh",
+          "short": "Miami (Ohio)"
+        },
+        "rank": "",
+        "score": "67",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "bcc731ce-edc6-44f4-b93c-2c97a9d24271",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(17-5)",
+        "names": {
+          "char6": "KENT",
+          "full": "Kent State University",
+          "seo": "kent-st",
+          "short": "Kent State"
+        },
+        "rank": "",
+        "score": "70",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Kent St. Miami (OH)",
+      "url": "/game/basketball-men/d1/2019/02/05/miami-oh-kent-st",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "SEC",
+          "conferenceSeo": "sec"
+        }],
+        "description": "(11-11)",
+        "names": {
+          "char6": "S CAR",
+          "full": "University of South Carolina, Columbia",
+          "seo": "south-carolina",
+          "short": "South Carolina"
+        },
+        "rank": "",
+        "score": "48",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "b0872103-38bd-482a-8107-c6e0bbf78c44",
+      "gameState": "final",
+      "home": {
+        "conferences": [
+          {
+            "conferenceName": "SEC",
+            "conferenceSeo": "sec"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(19-3)",
+        "names": {
+          "char6": "UK",
+          "full": "University of Kentucky",
+          "seo": "kentucky",
+          "short": "Kentucky"
+        },
+        "rank": "5",
+        "score": "76",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Kentucky South Carolina",
+      "url": "/game/basketball-men/d1/2019/02/05/south-carolina-kentucky",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MAAC",
+          "conferenceSeo": "maac"
+        }],
+        "description": "(12-10)",
+        "names": {
+          "char6": "RIDER",
+          "full": "Rider University",
+          "seo": "rider",
+          "short": "Rider"
+        },
+        "rank": "",
+        "score": "66",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "4dda4b6a-0aeb-44c1-a527-1ef071f573d3",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MAAC",
+          "conferenceSeo": "maac"
+        }],
+        "description": "(7-16)",
+        "names": {
+          "char6": "MANHAT",
+          "full": "Manhattan College",
+          "seo": "manhattan",
+          "short": "Manhattan"
+        },
+        "rank": "",
+        "score": "73",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Manhattan Rider",
+      "url": "/game/basketball-men/d1/2019/02/05/rider-manhattan",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(13-9)",
+        "names": {
+          "char6": "AKRON",
+          "full": "University of Akron",
+          "seo": "akron",
+          "short": "Akron"
+        },
+        "rank": "",
+        "score": "52",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "b8d18270-82fd-409e-935a-795606d5c78d",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(19-4)",
+        "names": {
+          "char6": "TOLEDO",
+          "full": "University of Toledo",
+          "seo": "toledo",
+          "short": "Toledo"
+        },
+        "rank": "",
+        "score": "63",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Toledo Akron",
+      "url": "/game/basketball-men/d1/2019/02/05/akron-toledo",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(16-6)",
+        "names": {
+          "char6": "BGSU",
+          "full": "Bowling Green State University",
+          "seo": "bowling-green",
+          "short": "Bowling Green"
+        },
+        "rank": "",
+        "score": "85",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "ef142f18-6b63-4640-8187-35ebefff2ae7",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(6-16)",
+        "names": {
+          "char6": "W MICH",
+          "full": "Western Michigan University",
+          "seo": "western-mich",
+          "short": "Western Mich."
+        },
+        "rank": "",
+        "score": "72",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Western Mich. Bowling Green",
+      "url": "/game/basketball-men/d1/2019/02/05/bowling-green-western-mich",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "Atlantic 10",
+          "conferenceSeo": "atlantic-10"
+        }],
+        "description": "(10-13)",
+        "names": {
+          "char6": "STJOES",
+          "full": "Saint Joseph's University",
+          "seo": "saint-josephs",
+          "short": "Saint Joseph's"
+        },
+        "rank": "",
+        "score": "69",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "df0fb325-60df-48e9-8e7b-4e52ad23deb4",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "Atlantic 10",
+          "conferenceSeo": "atlantic-10"
+        }],
+        "description": "(7-14)",
+        "names": {
+          "char6": "LASALL",
+          "full": "La Salle University",
+          "seo": "la-salle",
+          "short": "La Salle"
+        },
+        "rank": "",
+        "score": "83",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "La Salle Saint Joseph's",
+      "url": "/game/basketball-men/d1/2019/02/05/saint-josephs-la-salle",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "ASUN",
+          "conferenceSeo": "asun"
+        }],
+        "description": "(5-20)",
+        "names": {
+          "char6": "STETSN",
+          "full": "Stetson University",
+          "seo": "stetson",
+          "short": "Stetson"
+        },
+        "rank": "",
+        "score": "54",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "0aeb7b81-96c4-44b6-93a5-f72f63cf4b66",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "ASUN",
+          "conferenceSeo": "asun"
+        }],
+        "description": "(20-5)",
+        "names": {
+          "char6": "LIBRTY",
+          "full": "Liberty University",
+          "seo": "liberty",
+          "short": "Liberty"
+        },
+        "rank": "",
+        "score": "57",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Liberty Stetson",
+      "url": "/game/basketball-men/d1/2019/02/05/stetson-liberty",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "ACC",
+          "conferenceSeo": "acc"
+        }],
+        "description": "(11-10)",
+        "names": {
+          "char6": "BC",
+          "full": "Boston College",
+          "seo": "boston-college",
+          "short": "Boston College"
+        },
+        "rank": "",
+        "score": "55",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "e4a5ddc8-e1a3-4a6f-b63f-d02a6d3bc733",
+      "gameState": "final",
+      "home": {
+        "conferences": [
+          {
+            "conferenceName": "ACC",
+            "conferenceSeo": "acc"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(20-2)",
+        "names": {
+          "char6": "DUKE",
+          "full": "Duke University",
+          "seo": "duke",
+          "short": "Duke"
+        },
+        "rank": "2",
+        "score": "80",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Duke Boston College",
+      "url": "/game/basketball-men/d1/2019/02/05/boston-college-duke",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MVC",
+          "conferenceSeo": "mvc"
+        }],
+        "description": "(17-7)",
+        "names": {
+          "char6": "DRAKE",
+          "full": "Drake University",
+          "seo": "drake",
+          "short": "Drake"
+        },
+        "rank": "",
+        "score": "64",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "4ed0c5bb-f7fb-4146-9206-465830b9a6f4",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MVC",
+          "conferenceSeo": "mvc"
+        }],
+        "description": "(15-9)",
+        "names": {
+          "char6": "LOYCHI",
+          "full": "Loyola University Chicago",
+          "seo": "loyola-chicago",
+          "short": "Loyola Chicago"
+        },
+        "rank": "",
+        "score": "86",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Loyola Chicago Drake",
+      "url": "/game/basketball-men/d1/2019/02/05/drake-loyola-chicago",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "ACC",
+          "conferenceSeo": "acc"
+        }],
+        "description": "(12-11)",
+        "names": {
+          "char6": "PITT",
+          "full": "University of Pittsburgh",
+          "seo": "pittsburgh",
+          "short": "Pittsburgh"
+        },
+        "rank": "",
+        "score": "76",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL (OT)",
+      "finalMessage": "FINAL (OT)",
+      "gameID": "906defc5-0a73-4474-a4ed-76aea418576a",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "ACC",
+          "conferenceSeo": "acc"
+        }],
+        "description": "(9-13)",
+        "names": {
+          "char6": "WAKE",
+          "full": "Wake Forest University",
+          "seo": "wake-forest",
+          "short": "Wake Forest"
+        },
+        "rank": "",
+        "score": "78",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "07:00PM ET",
+      "startTimeEpoch": "1549411200",
+      "title": "Wake Forest Pittsburgh",
+      "url": "/game/basketball-men/d1/2019/02/05/pittsburgh-wake-forest",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MVC",
+          "conferenceSeo": "mvc"
+        }],
+        "description": "(13-11)",
+        "names": {
+          "char6": "VALPO",
+          "full": "Valparaiso University",
+          "seo": "valparaiso",
+          "short": "Valparaiso"
+        },
+        "rank": "",
+        "score": "69",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "d72bd564-9390-48e9-9d0b-4c7097b3cbac",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MVC",
+          "conferenceSeo": "mvc"
+        }],
+        "description": "(14-10)",
+        "names": {
+          "char6": "ILL ST",
+          "full": "Illinois State University",
+          "seo": "illinois-st",
+          "short": "Illinois State"
+        },
+        "rank": "",
+        "score": "53",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "08:00PM ET",
+      "startTimeEpoch": "1549414800",
+      "title": "Illinois St. Valparaiso",
+      "url": "/game/basketball-men/d1/2019/02/05/valparaiso-illinois-st",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [
+          {
+            "conferenceName": "ACC",
+            "conferenceSeo": "acc"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(17-5)",
+        "names": {
+          "char6": "FSU",
+          "full": "Florida State University",
+          "seo": "florida-st",
+          "short": "Florida State"
+        },
+        "rank": "22",
+        "score": "80",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "4c26bc09-eed6-471e-bddc-d68316effc84",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "ACC",
+          "conferenceSeo": "acc"
+        }],
+        "description": "(16-7)",
+        "names": {
+          "char6": "SYR",
+          "full": "Syracuse University",
+          "seo": "syracuse",
+          "short": "Syracuse"
+        },
+        "rank": "",
+        "score": "62",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "08:00PM ET",
+      "startTimeEpoch": "1549414800",
+      "title": "Syracuse Florida St.",
+      "url": "/game/basketball-men/d1/2019/02/05/florida-st-syracuse",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [
+          {
+            "conferenceName": "Big Ten",
+            "conferenceSeo": "big-ten"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(21-2)",
+        "names": {
+          "char6": "MICH",
+          "full": "University of Michigan",
+          "seo": "michigan",
+          "short": "Michigan"
+        },
+        "rank": "7",
+        "score": "77",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "78ffbc43-880f-4818-b18f-19f1b7500302",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "Big Ten",
+          "conferenceSeo": "big-ten"
+        }],
+        "description": "(11-11)",
+        "names": {
+          "char6": "RUTGER",
+          "full": "Rutgers, The State University of New Jersey, New Brunswick",
+          "seo": "rutgers",
+          "short": "Rutgers"
+        },
+        "rank": "",
+        "score": "65",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "08:00PM ET",
+      "startTimeEpoch": "1549414800",
+      "title": "Rutgers Michigan",
+      "url": "/game/basketball-men/d1/2019/02/05/michigan-rutgers",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(12-11)",
+        "names": {
+          "char6": "BALLST",
+          "full": "Ball State University",
+          "seo": "ball-st",
+          "short": "Ball State"
+        },
+        "rank": "",
+        "score": "72",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "ee545187-1282-466c-a03f-2beb824005ff",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MAC",
+          "conferenceSeo": "mac"
+        }],
+        "description": "(12-11)",
+        "names": {
+          "char6": "NIU",
+          "full": "Northern Illinois University",
+          "seo": "northern-ill",
+          "short": "Northern Ill."
+        },
+        "rank": "",
+        "score": "71",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "08:00PM ET",
+      "startTimeEpoch": "1549414800",
+      "title": "Northern Ill. Ball St.",
+      "url": "/game/basketball-men/d1/2019/02/05/ball-st-northern-ill",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "ACC",
+          "conferenceSeo": "acc"
+        }],
+        "description": "(16-7)",
+        "names": {
+          "char6": "NC ST",
+          "full": "North Carolina State University",
+          "seo": "north-carolina-st",
+          "short": "NC State"
+        },
+        "rank": "",
+        "score": "96",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "4ffd9403-c270-46b0-8c90-941041dcbbbe",
+      "gameState": "final",
+      "home": {
+        "conferences": [
+          {
+            "conferenceName": "ACC",
+            "conferenceSeo": "acc"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(18-4)",
+        "names": {
+          "char6": "UNC",
+          "full": "University of North Carolina, Chapel Hill",
+          "seo": "north-carolina",
+          "short": "North Carolina"
+        },
+        "rank": "8",
+        "score": "113",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "08:00PM ET",
+      "startTimeEpoch": "1549414800",
+      "title": "North Carolina NC State",
+      "url": "/game/basketball-men/d1/2019/02/05/north-carolina-st-north-carolina",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "Big East",
+          "conferenceSeo": "big-east"
+        }],
+        "description": "(17-6)",
+        "names": {
+          "char6": "STJOHN",
+          "full": "St. John's University (New York)",
+          "seo": "st-johns-ny",
+          "short": "St. John's "
+        },
+        "rank": "",
+        "score": "70",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "8c6ba1ed-9811-40b7-9405-ce4e453dbb7a",
+      "gameState": "final",
+      "home": {
+        "conferences": [
+          {
+            "conferenceName": "Big East",
+            "conferenceSeo": "big-east"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(19-4)",
+        "names": {
+          "char6": "MARQ",
+          "full": "Marquette University",
+          "seo": "marquette",
+          "short": "Marquette"
+        },
+        "rank": "10",
+        "score": "69",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "08:00PM ET",
+      "startTimeEpoch": "1549414800",
+      "title": "Marquette St. John's (NY)",
+      "url": "/game/basketball-men/d1/2019/02/05/st-johns-ny-marquette",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "SEC",
+          "conferenceSeo": "sec"
+        }],
+        "description": "(11-10)",
+        "names": {
+          "char6": "MIZZOU",
+          "full": "University of Missouri, Columbia",
+          "seo": "missouri",
+          "short": "Missouri"
+        },
+        "rank": "",
+        "score": "60",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "757bf9bf-6be8-4e7c-a100-c7ca1ae2b65b",
+      "gameState": "final",
+      "home": {
+        "conferences": [
+          {
+            "conferenceName": "SEC",
+            "conferenceSeo": "sec"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(21-1)",
+        "names": {
+          "char6": "TENN",
+          "full": "University of Tennessee, Knoxville",
+          "seo": "tennessee",
+          "short": "Tennessee"
+        },
+        "rank": "1",
+        "score": "72",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "09:00PM ET",
+      "startTimeEpoch": "1549418400",
+      "title": "Tennessee Missouri",
+      "url": "/game/basketball-men/d1/2019/02/05/missouri-tennessee",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "Atlantic 10",
+          "conferenceSeo": "atlantic-10"
+        }],
+        "description": "(15-8)",
+        "names": {
+          "char6": "DAYTON",
+          "full": "University of Dayton",
+          "seo": "dayton",
+          "short": "Dayton"
+        },
+        "rank": "",
+        "score": "60",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "769d75ac-9c7a-469d-b3ff-c62da073c7db",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "Atlantic 10",
+          "conferenceSeo": "atlantic-10"
+        }],
+        "description": "(15-8)",
+        "names": {
+          "char6": "ST LOU",
+          "full": "Saint Louis University",
+          "seo": "saint-louis",
+          "short": "Saint Louis"
+        },
+        "rank": "",
+        "score": "73",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "09:00PM ET",
+      "startTimeEpoch": "1549418400",
+      "title": "Saint Louis Dayton",
+      "url": "/game/basketball-men/d1/2019/02/05/dayton-saint-louis",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "SEC",
+          "conferenceSeo": "sec"
+        }],
+        "description": "(9-13)",
+        "names": {
+          "char6": "VANDY",
+          "full": "Vanderbilt University",
+          "seo": "vanderbilt",
+          "short": "Vanderbilt"
+        },
+        "rank": "",
+        "score": "66",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "7c23da72-ad69-4a1e-a393-df4271bbbf21",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "SEC",
+          "conferenceSeo": "sec"
+        }],
+        "description": "(14-8)",
+        "names": {
+          "char6": "ARK",
+          "full": "University of Arkansas, Fayetteville",
+          "seo": "arkansas",
+          "short": "Arkansas"
+        },
+        "rank": "",
+        "score": "69",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "09:00PM ET",
+      "startTimeEpoch": "1549418400",
+      "title": "Arkansas Vanderbilt",
+      "url": "/game/basketball-men/d1/2019/02/05/vanderbilt-arkansas",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [
+          {
+            "conferenceName": "Big 12",
+            "conferenceSeo": "big-12"
+          },
+          {
+            "conferenceName": "Top 25",
+            "conferenceSeo": "top-25"
+          }
+        ],
+        "description": "(17-6)",
+        "names": {
+          "char6": "KANSAS",
+          "full": "University of Kansas",
+          "seo": "kansas",
+          "short": "Kansas"
+        },
+        "rank": "13",
+        "score": "67",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "dba8e7f8-631d-43bb-a245-33929b393302",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "Big 12",
+          "conferenceSeo": "big-12"
+        }],
+        "description": "(17-5)",
+        "names": {
+          "char6": "KAN ST",
+          "full": "Kansas State University",
+          "seo": "kansas-st",
+          "short": "Kansas St."
+        },
+        "rank": "",
+        "score": "74",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "09:00PM ET",
+      "startTimeEpoch": "1549418400",
+      "title": "Kansas St. Kansas",
+      "url": "/game/basketball-men/d1/2019/02/05/kansas-kansas-st",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "SEC",
+          "conferenceSeo": "sec"
+        }],
+        "description": "(12-10)",
+        "names": {
+          "char6": "FLA",
+          "full": "University of Florida",
+          "seo": "florida",
+          "short": "Florida"
+        },
+        "rank": "",
+        "score": "62",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "b4c356d5-4b5b-4a7c-91e0-c7a8a881c0f3",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "SEC",
+          "conferenceSeo": "sec"
+        }],
+        "description": "(16-6)",
+        "names": {
+          "char6": "AUBURN",
+          "full": "Auburn University",
+          "seo": "auburn",
+          "short": "Auburn"
+        },
+        "rank": "",
+        "score": "76",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "09:00PM ET",
+      "startTimeEpoch": "1549418400",
+      "title": "Auburn Florida",
+      "url": "/game/basketball-men/d1/2019/02/05/florida-auburn",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MWC",
+          "conferenceSeo": "mwc"
+        }],
+        "description": "(18-5)",
+        "names": {
+          "char6": "UT ST",
+          "full": "Utah State University",
+          "seo": "utah-st",
+          "short": "Utah State"
+        },
+        "rank": "",
+        "score": "82",
+        "seed": "",
+        "winner": true
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "48ac5dd4-3774-4e1f-be86-d36e75f04ba5",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MWC",
+          "conferenceSeo": "mwc"
+        }],
+        "description": "(16-6)",
+        "names": {
+          "char6": "FRESNO",
+          "full": "California State University, Fresno",
+          "seo": "fresno-st",
+          "short": "Fresno State"
+        },
+        "rank": "",
+        "score": "81",
+        "seed": "",
+        "winner": false
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "10:30PM ET",
+      "startTimeEpoch": "1549423800",
+      "title": "Fresno St. Utah St.",
+      "url": "/game/basketball-men/d1/2019/02/05/utah-st-fresno-st",
+      "videoState": ""
+    }},
+    {"game": {
+      "away": {
+        "conferences": [{
+          "conferenceName": "MWC",
+          "conferenceSeo": "mwc"
+        }],
+        "description": "(13-9)",
+        "names": {
+          "char6": "SDSU",
+          "full": "San Diego State University",
+          "seo": "san-diego-st",
+          "short": "San Diego State"
+        },
+        "rank": "",
+        "score": "70",
+        "seed": "",
+        "winner": false
+      },
+      "bracketId": "",
+      "bracketRegion": "",
+      "bracketRound": "",
+      "contestClock": "0:00",
+      "currentPeriod": "FINAL",
+      "finalMessage": "FINAL",
+      "gameID": "67ec924c-8b0f-49ad-b8fe-0ba95d309c80",
+      "gameState": "final",
+      "home": {
+        "conferences": [{
+          "conferenceName": "MWC",
+          "conferenceSeo": "mwc"
+        }],
+        "description": "(10-12)",
+        "names": {
+          "char6": "N MEX",
+          "full": "University of New Mexico",
+          "seo": "new-mexico",
+          "short": "New Mexico"
+        },
+        "rank": "",
+        "score": "83",
+        "seed": "",
+        "winner": true
+      },
+      "liveVideoEnabled": false,
+      "network": "",
+      "startDate": "02-05-2019",
+      "startTime": "11:00PM ET",
+      "startTimeEpoch": "1549425600",
+      "title": "New Mexico San Diego St.",
+      "url": "/game/basketball-men/d1/2019/02/05/san-diego-st-new-mexico",
+      "videoState": ""
+    }}
+  ],
+  "inputMD5Sum": "9ab7cccb7de0ee0dcd0f384716800b9d",
+  "updated_at": "08-06-2019 13:33:22"
+}

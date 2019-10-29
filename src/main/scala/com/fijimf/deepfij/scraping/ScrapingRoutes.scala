@@ -15,7 +15,7 @@ object ScrapingRoutes {
 
   implicit def intEntityEncoder[F[_] : Applicative]: EntityEncoder[F, Int] = jsonEncoderOf
 
-  def healthcheckRoutes[F[_]](r: ScheduleRepo[F])(implicit F: Sync[F]): HttpRoutes[F] = {
+  def healthcheckRoutes[F[_]]()(implicit F: Sync[F]): HttpRoutes[F] = {
     val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
     import dsl._
     HttpRoutes.of[F] {
@@ -28,32 +28,5 @@ object ScrapingRoutes {
     }
   }
 
-  def updaterRoutes[F[_]](u: Updater[F])(implicit F: Sync[F]): HttpRoutes[F] = {
-    val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
-    import dsl._
-    HttpRoutes.of[F] {
-      case req@POST -> Root / "update" =>
-        for {
-          up <- req.as[ScrapeResult]
-          mods <- u.updateGamesAndResults(up.updates, up.loadKey)
-          _ <- F.delay(mods.foreach { case (g, or) => log.info(s"$g") })
-          resp <- Ok(s"${mods.size} changes were made")
-        } yield {
-          resp
-        }
-    }
-  }
 
-  def snapshotterRoutes[F[_]](r: Snapshotter[F])(implicit F: Sync[F]): HttpRoutes[F] = {
-    val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
-    import dsl._
-    HttpRoutes.of[F] {
-      case req@GET -> Root =>
-        for {
-          resp <- Ok()
-        } yield {
-          resp
-        }
-    }
-  }
 }
