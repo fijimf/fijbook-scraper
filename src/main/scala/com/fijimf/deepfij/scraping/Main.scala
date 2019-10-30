@@ -2,10 +2,15 @@ package com.fijimf.deepfij.scraping
 
 import cats.effect.{ExitCode, IO, IOApp, Resource}
 import cats.implicits._
+import com.fijimf.deepfij.scraping.model.ScrapingModel
+import com.fijimf.deepfij.scraping.services.Scraper
 import com.typesafe.config.{Config, ConfigFactory}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import org.flywaydb.core.Flyway
+import org.http4s.client.blaze.BlazeClientBuilder
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Main extends IOApp {
 
@@ -34,9 +39,9 @@ object Main extends IOApp {
   def run(args: List[String]): IO[ExitCode] = {
     transactor.use { xa =>
       for {
-        _ <- initDB(xa)
+     //   _ <- initDB(xa)
         exitCode <- ScrapingServer
-          .stream[IO](xa)
+          .stream[IO]( xa)
           .compile[IO, IO, ExitCode]
           .drain
           .as(ExitCode.Success)

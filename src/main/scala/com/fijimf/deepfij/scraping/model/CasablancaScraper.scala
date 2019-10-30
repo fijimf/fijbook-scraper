@@ -1,5 +1,6 @@
 package com.fijimf.deepfij.scraping.model
 
+import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDate, LocalDateTime, ZoneId}
 
 import cats.implicits._
@@ -7,11 +8,15 @@ import com.fijimf.deepfij.schedule.model.UpdateCandidate
 
 case class CasablancaScraper(season: Int) extends DateBasedScrapingModel {
   override val modelName: String = "casablanca"
+  override def modelKey(k: LocalDate): String = k.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 
   override def urlFromKey(k: LocalDate): String = {
     "https://data.ncaa.com/casablanca/scoreboard/basketball-men/d1/%04d/%02d/%02d/scoreboard.json"
       .format(k.getYear, k.getMonthValue, k.getDayOfMonth)
   }
+
+  override def scrape(data: String): List[UpdateCandidate] = CasablancaParser.parseGames(data)
+
 }
 
 object CasablancaParser {
