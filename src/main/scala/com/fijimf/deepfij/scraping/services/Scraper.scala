@@ -7,11 +7,14 @@ import com.fijimf.deepfij.schedule.model.ScrapeResult
 import com.fijimf.deepfij.scraping.model.{DateBasedScrapingModel, ScrapingModel, TeamBasedScrapingModel}
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
+import org.apache.commons.codec.digest.DigestUtils
 import org.http4s.EntityDecoder.text
 import org.http4s.circe.jsonEncoderOf
 import org.http4s.client.Client
-import org.http4s.{EntityEncoder, Method, Request, Uri}
+import org.http4s.{EntityEncoder, Method, ParseResult, Request, Response, Status, Uri}
 import org.slf4j.LoggerFactory
+
+import scala.concurrent.duration._
 
 
 case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]])(implicit F: Async[F], clock: Clock[F]) {
@@ -40,26 +43,46 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   }
 
   def createUpdateRequest(sr: ScrapeResult): Request[F] = {
-    implicit val scrapeResultEncoder: Encoder.AsObject[ScrapeResult] = deriveEncoder[ScrapeResult]
+//    implicit val scrapeResultEncoder: Encoder.AsObject[ScrapeResult] = deriveEncoder[ScrapeResult]
+//
+//    implicit def scrapeResultEntityEncoder[F[_] : Applicative]: EntityEncoder[F, ScrapeResult] = jsonEncoderOf
 
-    implicit def scrapeResultEntityEncoder[F[_] : Applicative]: EntityEncoder[F, ScrapeResult] = jsonEncoderOf
-
-    Request(Method.POST, Uri.uri("http://localhost:8073/update")).withEntity(sr)
+    Request(Method.POST, Uri.uri("http://localhost:8074/update")).withEntity(sr)
   }
 
-  def scrapeUrl(k: String, url: String, model: ScrapingModel[_]): F[String] = {
+  def handleRawResponse(key: String, start: Long, resp: Response[F]): F[(ScrapeDataRetrieval, Option[String])] = {
+    val statusCode: Int = resp.status.code
+    val ok: Boolean = statusCode === Status.Ok.code
     for {
-      _ <- F.delay(log.info(s"$url"))
-      s <- httpClient.expect[String](url)
-      sr = ScrapeResult(k, model.scrape(s))
-      req = createUpdateRequest(sr)
-      t <- httpClient.expect[String](req)
+      end <- clock.realTime(MILLISECONDS)
+      data <- if (ok) resp.as[String] else F.pure("")
     } yield {
-      t
+      (ScrapeDataRetrieval(key, statusCode, end - start, data.length, DigestUtils.md5Hex(data)), if (ok) Some(data) else None)
     }
   }
 
-}
-object Scraper {
+
+  def scrapeUrl(k: String, url: String, model: ScrapingModel[_]): F[String] = {
+    Uri.fromString(url) match {
+      case Left(parseFailure)=>
+        F.delay(s"$k => ${parseFailure.getMessage()}")
+      case Right(uri) =>
+        for {
+          start <- clock.realTime(MILLISECONDS)
+          _ <- F.delay(log.info(s"$url"))
+          (sd, data) <- httpClient.fetch(Request[F](Method.GET, uri))(handleRawResponse(k, start, _))
+          sr = data.map(s => ScrapeResult(k, model.scrape(s)))
+          req = sr.map(createUpdateRequest)
+          t <- req match {
+            case Some(r) => httpClient.expect[String](r)
+            case _ => F.delay(sd.toString)
+          }
+        } yield {
+          s"$k => $t"
+        }
+    }
+
+  }
 
 }
+case class ScrapeDataRetrieval(key:String, statusCode:Int, requestLatency:Long, size:Int, digest:String)

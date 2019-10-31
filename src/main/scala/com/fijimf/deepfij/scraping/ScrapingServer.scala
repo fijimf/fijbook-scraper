@@ -12,6 +12,7 @@ import org.http4s.server.middleware.Logger
 import org.http4s.syntax.kleisli._
 import org.http4s.{HttpApp, HttpRoutes}
 
+import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
@@ -28,7 +29,7 @@ object ScrapingServer {
       httpApp: HttpApp[F] = (healthcheckService <+> scrapingService).orNotFound
       finalHttpApp: HttpApp[F] = Logger.httpApp[F](logHeaders = true, logBody = true)(httpApp)
       exitCode <- BlazeServerBuilder[F]
-        .bindHttp(port = 8077, host = "0.0.0.0")
+        .bindHttp(port = 8077, host = "0.0.0.0").withIdleTimeout(5.minutes).withResponseHeaderTimeout(5.minutes)
         .withHttpApp(finalHttpApp)
         .serve
     } yield {

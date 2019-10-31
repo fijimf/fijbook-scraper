@@ -6,6 +6,8 @@ import java.time.{Instant, LocalDate, LocalDateTime, ZoneId}
 import cats.implicits._
 import com.fijimf.deepfij.schedule.model.UpdateCandidate
 
+import scala.util.{Failure, Success, Try}
+
 case class CasablancaScraper(season: Int) extends DateBasedScrapingModel {
   override val modelName: String = "casablanca"
   override def modelKey(k: LocalDate): String = k.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
@@ -72,7 +74,12 @@ object CasablancaParser {
   }
 
   def extractHomeScore(json: Json): List[Int] = {
-    root.home.score.string.getOption(json).toList.map(_.toInt)
+    Try {
+      root.home.score.string.getOption(json).toList.map(_.toInt)
+    } match {
+      case Success(lst) => lst
+      case Failure(exception) => List.empty[Int]
+    }
   }
 
   def extractAwayTeam(json: Json): List[String] = {
@@ -80,7 +87,12 @@ object CasablancaParser {
   }
 
   def extractAwayScore(json: Json): List[Int] = {
-    root.away.score.string.getOption(json).toList.map(_.toInt)
+    Try {
+      root.away.score.string.getOption(json).toList.map(_.toInt)
+    } match {
+      case Success(lst) => lst
+      case Failure(exception) => List.empty[Int]
+    }
   }
 
   def extractNumPeriods(json: Json): Int = {

@@ -33,7 +33,7 @@ lazy val root = (project in file("."))
       "commons-codec"   % "commons-codec"        % "1.13",
       "com.spotify"     % "docker-client"        % "8.14.0",
       "com.amazonaws"   % "aws-java-sdk-s3"      % "1.11.651",
-      "com.fijimf.deepfij" %% "fijbook-schedule" % "1.0.0"
+      "com.fijimf.deepfij" %% "fijbook-schedule" % "1.0.1"
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.0"),
