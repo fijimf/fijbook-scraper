@@ -11,8 +11,8 @@ trait DateBasedScrapingModel extends ScrapingModel[LocalDate] {
   val lookBackDays = 3
   val lookAheadDays = 8
 
-  def updateKeys(d: LocalDate): List[LocalDate] = keys.filter(d => {
-    d.isAfter(d.minusDays(lookBackDays)) && d.isBefore(d.plusDays(lookAheadDays))
+  def updateKeys(asOf: LocalDate): List[LocalDate] = keys.filter(d => {
+    d.isAfter(asOf.minusDays(lookBackDays)) && d.isBefore(asOf.plusDays(lookAheadDays))
   })
 
   def updateUrls(d:LocalDate):List[String] = updateKeys(d).map(urlFromKey)

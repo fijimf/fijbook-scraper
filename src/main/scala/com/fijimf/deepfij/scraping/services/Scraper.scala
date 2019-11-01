@@ -1,5 +1,8 @@
 package com.fijimf.deepfij.scraping.services
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import cats.Applicative
 import cats.effect._
 import cats.implicits._
@@ -20,7 +23,7 @@ import scala.concurrent.duration._
 case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]])(implicit F: Async[F], clock: Clock[F]) {
   val log = LoggerFactory.getLogger(Scraper.getClass)
 
-  def scrapeAll(season: Int): F[List[String]] = {
+  def fill(season: Int): F[List[String]] = {
     scrapers.get(season) match {
       case Some(d: DateBasedScrapingModel) =>
         F.delay(log.info(s"For season $season found model ${d.modelName}."))
@@ -35,10 +38,21 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
 
   }
 
-  def scrapeUpdate(season: Int): Unit = {
+  def update(season: Int, yyyymmdd:String): F[List[String]]  = {
+    val asOf: LocalDate = LocalDate.parse(yyyymmdd,DateTimeFormatter.ofPattern("yyyyMMdd"))
     scrapers.get(season) match {
       case Some(d: DateBasedScrapingModel) =>
-      case _ =>
+        F.delay(log.info(s"For season $season found model ${d.modelName}."))
+        F.delay(
+          log.info(s"Running update based on date $yyyymmdd.")
+        )
+        val k: List[F[String]] = d.updateKeys(asOf).map(k => {
+          val url: String = d.urlFromKey(k)
+          scrapeUrl(d.modelKey(k), url, d)
+        })
+        k.sequence
+      case Some(t: TeamBasedScrapingModel) => F.delay(List("Team based models do not support update"))
+      case _ => F.delay(List("Could not find appropriate model"))
     }
   }
 
@@ -72,6 +86,7 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
           _ <- F.delay(log.info(s"$url"))
           (sd, data) <- httpClient.fetch(Request[F](Method.GET, uri))(handleRawResponse(k, start, _))
           sr = data.map(s => ScrapeResult(k, model.scrape(s)))
+          _<- F.delay(log.info(s"$k=>$sd ${data.map(_.length).getOrElse(-1)}  ${sr.map(_.updates.size).getOrElse(0)}"))
           req = sr.map(createUpdateRequest)
           t <- req match {
             case Some(r) => httpClient.expect[String](r)

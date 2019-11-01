@@ -29,7 +29,9 @@ object ScrapingServer {
       httpApp: HttpApp[F] = (healthcheckService <+> scrapingService).orNotFound
       finalHttpApp: HttpApp[F] = Logger.httpApp[F](logHeaders = true, logBody = true)(httpApp)
       exitCode <- BlazeServerBuilder[F]
-        .bindHttp(port = 8077, host = "0.0.0.0").withIdleTimeout(5.minutes).withResponseHeaderTimeout(5.minutes)
+        .bindHttp(port = 8077, host = "0.0.0.0")
+        .withIdleTimeout(1.minutes)
+        .withResponseHeaderTimeout(5.minutes)
         .withHttpApp(finalHttpApp)
         .serve
     } yield {
