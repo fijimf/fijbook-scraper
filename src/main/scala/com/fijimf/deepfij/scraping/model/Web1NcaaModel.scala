@@ -1,7 +1,15 @@
 package com.fijimf.deepfij.scraping.model
+import com.fijimf.deepfij.schedule.model.UpdateCandidate
 
-class Web1NcaaScraper {
+case class Web1NcaaScraper(season:Int) extends TeamBasedScrapingModel {
+  override val modelName: String = "web1ncaa"
 
+
+  override def keys: List[String] = Web1NcaaKey.codeToKey.keys.map(_.toString)
+
+  override def urlFromKey(k: String): String = s"http://web1.ncaa.org/stats/exec/records?doWhat=display&useData=CAREER&sportCode=MBB&academicYear=$season&orgId=$k&division=1&playerId=-100"
+
+  override def scrape(data: String): List[UpdateCandidate] = ???
 }
 
 object Web1NcaaKey {
