@@ -14,5 +14,5 @@ trait ScrapingModel[T] {
 
   def urlFromKey(k:T):String
 
-  def scrape(data:String):List[UpdateCandidate]
+  def scrape(k:String, data:String):List[UpdateCandidate]
 }

@@ -1,15 +1,132 @@
 package com.fijimf.deepfij.scraping.model
+import java.io.{Reader, StringReader}
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, LocalDateTime}
+
+import cats.implicits._
 import com.fijimf.deepfij.schedule.model.UpdateCandidate
+import org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl
+import org.xml.sax.InputSource
+
+import scala.io.Source
+import scala.util.matching.Regex
+import scala.util.{Failure, Success, Try}
+import scala.xml.parsing.NoBindingFactoryAdapter
+import scala.xml.{Node, NodeSeq}
 
 case class Web1NcaaScraper(season:Int) extends TeamBasedScrapingModel {
   override val modelName: String = "web1ncaa"
 
-
-  override def keys: List[String] = Web1NcaaKey.codeToKey.keys.map(_.toString)
+  override def keys: List[String] = Web1NcaaKey.codeToKey.keys.map(_.toString).toList
 
   override def urlFromKey(k: String): String = s"http://web1.ncaa.org/stats/exec/records?doWhat=display&useData=CAREER&sportCode=MBB&academicYear=$season&orgId=$k&division=1&playerId=-100"
 
-  override def scrape(data: String): List[UpdateCandidate] = ???
+  override def scrape(key:String, data: String): List[UpdateCandidate] = Web1NcaaParser.parseGames(key, data)
+}
+
+object Web1NcaaParser{
+
+  def extractUpdates(key:String, root: Node): List[UpdateCandidate] = {
+    val rows: NodeSeq = (root \ "body" \ "table" \\ "tr").filter(checkAttributeEquals(_,"class","text"))
+    rows.flatMap(extractGame(key.toInt,_)).toList
+  }
+
+  def parseGames(key:String, data: String): List[UpdateCandidate] = {
+    loadFromString(data) match {
+      case Success(root)=>
+        extractUpdates(key, root)
+      case Failure(thr)=>List.empty[UpdateCandidate]
+    }
+  }
+
+  def loadFromReader(r: Reader): Try[Node] = {
+    Try {
+      new NoBindingFactoryAdapter().loadXML(new InputSource(r), new SAXFactoryImpl().newSAXParser())
+    }
+  }
+
+  def loadFromString(s: String): Try[Node] =  loadFromReader(new StringReader(s))
+
+
+  def main(args: Array[String]): Unit = {
+    parseGames("51", Source.fromResource("orgId51x.html").mkString).foreach(println(_))
+  }
+
+  def extractGame(teamId:Int,row:Node):Option[UpdateCandidate] = {
+    val cells: NodeSeq = (row \ "td")
+    if (cells.headOption.exists(_.text.contains("%"))){
+      cells.toList match {
+        case oppNode::dateNode::scoreNode::oppScoreNode::homeAwayNode::siteNode::otNode::attendenceNode::Nil=>
+          val oppId: Int = oppNodeToCode(oppNode)
+          val dateTime: LocalDateTime = LocalDate.parse(dateNode.text.trim, DateTimeFormatter.ofPattern("MM/dd/yyyy")).atStartOfDay()
+          val homeAway:String = homeAwayNode.text.trim
+          val score: Int =scoreNode.text.trim.toInt
+          val oppScore: Int =oppScoreNode.text.trim.toInt
+          val otString: String =otNode.text.trim
+
+          for {
+            team<-Web1NcaaKey.codeToKey.get(teamId)
+            opponent<-Web1NcaaKey.codeToKey.get(oppId)
+          } yield {
+            val (ht, hs, at, as) = if (homeAway.equalsIgnoreCase("home")) {
+              (team, score, opponent, oppScore)
+            } else if (homeAway.equalsIgnoreCase("away")) {
+              (opponent, oppScore, team, score)
+            } else {
+              if (teamId < oppId) {
+                (team, score, opponent, oppScore)
+              } else {
+                (opponent, oppScore, team, score)
+              }
+            }
+            UpdateCandidate(
+              dateTime,
+              ht,
+              at,
+              None,
+              Some(homeAway.equalsIgnoreCase("neutral")),
+              Some(hs),
+              Some(as),
+              Some(otStringToNumPeriods(otString))
+            )
+          }
+        case _ =>None
+      }
+    } else {
+      None
+    }
+  }
+
+  def oppNodeToCode(oppNode:Node): Int ={
+    val extractor: Regex = """javascript:showTeamResults\((\d+)\);""".r
+    (for {
+      a <- (oppNode \ "a")
+      hr <- a.attribute("href")
+      hr0 <- hr.headOption
+    }yield {
+      hr0.text.trim match {
+        case extractor(t) => t.toInt
+        case _ => -1
+      }
+    }).headOption.getOrElse(-1)
+  }
+
+    def otStringToNumPeriods(s:String): Int ={
+    s.toLowerCase.trim match {
+      case "-"=>2
+      case "1 ot"=>3
+      case "2 ot"=>4
+      case "3 ot"=>5
+      case "4 ot"=>6
+      case "5 ot"=>7
+      case "6 ot"=>8
+      case _ =>2
+    }
+  }
+
+  private def checkAttributeEquals(node:Node, attribute: String, value:String):Boolean = {
+    node.attributes.exists(_.value.text === value)
+  }
 }
 
 object Web1NcaaKey {
@@ -367,5 +484,5 @@ object Web1NcaaKey {
     "youngstown-st" -> 817
   )
 
-  val codeToKey: Map[Int, String] = keyToCode.map { case (k: String, v: Int) => v -> k }.toMap
+  val codeToKey: Map[Int, String] = keyToCode.map { case (k: String, v: Int) => v -> k }
 }

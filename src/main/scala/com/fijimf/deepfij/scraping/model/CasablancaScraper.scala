@@ -17,13 +17,11 @@ case class CasablancaScraper(season: Int) extends DateBasedScrapingModel {
       .format(k.getYear, k.getMonthValue, k.getDayOfMonth)
   }
 
-  override def scrape(data: String): List[UpdateCandidate] = CasablancaParser.parseGames(data)
+  override def scrape(key:String, data: String): List[UpdateCandidate] = CasablancaParser.parseGames(data)
 
 }
 
 object CasablancaParser {
-
-
   import io.circe._
   import io.circe.optics.JsonPath._
   import io.circe.parser._

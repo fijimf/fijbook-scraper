@@ -85,7 +85,7 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
           start <- clock.realTime(MILLISECONDS)
           _ <- F.delay(log.info(s"$url"))
           (sd, data) <- httpClient.fetch(Request[F](Method.GET, uri))(handleRawResponse(k, start, _))
-          sr = data.map(s => ScrapeResult(k, model.scrape(s)))
+          sr = data.map(s => ScrapeResult(k, model.scrape(k, s)))
           _<- F.delay(log.info(s"$k=>$sd ${data.map(_.length).getOrElse(-1)}  ${sr.map(_.updates.size).getOrElse(0)}"))
           req = sr.map(createUpdateRequest)
           t <- req match {
