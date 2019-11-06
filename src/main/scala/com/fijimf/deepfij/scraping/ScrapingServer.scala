@@ -2,7 +2,7 @@ package com.fijimf.deepfij.scraping
 
 import cats.effect.{ConcurrentEffect, ContextShift, ExitCode, Timer}
 import cats.syntax.semigroupk._
-import com.fijimf.deepfij.scraping.model.{CasablancaScraper, ScrapingModel}
+import com.fijimf.deepfij.scraping.model.{CasablancaScraper, ScrapingModel, Web1NcaaScraper}
 import com.fijimf.deepfij.scraping.services.Scraper
 import doobie.util.transactor.Transactor
 import fs2.Stream
@@ -24,7 +24,7 @@ object ScrapingServer {
 
     for {
       client <- BlazeClientBuilder[F](global).stream
-      scraper = Scraper(client, Map(2019-> CasablancaScraper(2019)))
+      scraper = Scraper(client, Map(2019-> CasablancaScraper(2019), 2018->Web1NcaaScraper(2018)))
       scrapingService: HttpRoutes[F] = ScrapingRoutes.scrapeRoutes(scraper)
       httpApp: HttpApp[F] = (healthcheckService <+> scrapingService).orNotFound
       finalHttpApp: HttpApp[F] = Logger.httpApp[F](logHeaders = true, logBody = true)(httpApp)

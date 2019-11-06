@@ -3,7 +3,6 @@ package com.fijimf.deepfij.scraping.model
 import java.time.LocalDate
 
 trait DateBasedScrapingModel extends ScrapingModel[LocalDate] {
-  def modelKey(k: LocalDate): String
 
   val start: LocalDate = LocalDate.of(season - 1, 11, 1)
   val end: LocalDate = LocalDate.of(season, 5, 1)

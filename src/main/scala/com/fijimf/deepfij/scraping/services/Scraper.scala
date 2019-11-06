@@ -3,25 +3,23 @@ package com.fijimf.deepfij.scraping.services
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import cats.Applicative
 import cats.effect._
+import cats.effect.concurrent.Semaphore
 import cats.implicits._
 import com.fijimf.deepfij.schedule.model.ScrapeResult
 import com.fijimf.deepfij.scraping.model.{DateBasedScrapingModel, ScrapingModel, TeamBasedScrapingModel}
-import io.circe.Encoder
-import io.circe.generic.semiauto.deriveEncoder
 import org.apache.commons.codec.digest.DigestUtils
 import org.http4s.EntityDecoder.text
-import org.http4s.circe.jsonEncoderOf
 import org.http4s.client.Client
-import org.http4s.{EntityEncoder, Method, ParseResult, Request, Response, Status, Uri}
+import org.http4s.{Method, Request, Response, Status, Uri}
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 
 
-case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]])(implicit F: Async[F], clock: Clock[F]) {
+case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]])(implicit F: ConcurrentEffect[F], cs:ContextShift[F], clock: Clock[F], tim:Timer[F]) {
   val log = LoggerFactory.getLogger(Scraper.getClass)
+
 
   def fill(season: Int): F[List[String]] = {
     scrapers.get(season) match {
@@ -32,7 +30,17 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
           scrapeUrl(d.modelKey(k), url, d)
         })
         k.sequence
-      case Some(t: TeamBasedScrapingModel) => F.delay(List("Unable to handle team models"))
+      case Some(t: TeamBasedScrapingModel) =>
+        for {
+          _ <- F.delay(log.info(s"For season $season found model ${t.modelName}."))
+          sem <- Semaphore(1L)
+          lk <- t.keys.map(k => {
+            val url: String = t.urlFromKey(k)
+            scrapeUrl(t.modelKey(k), url, t, sem)
+          }).sequence
+        } yield {
+          lk
+        }
       case _ => F.delay(List("Could not find appropriate model"))
     }
 
@@ -75,16 +83,26 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
     }
   }
 
-
   def scrapeUrl(k: String, url: String, model: ScrapingModel[_]): F[String] = {
+    for {
+      sem<-Semaphore(9999)//<-TODO remove this silly hack
+      res<-scrapeUrl(k, url, model, sem)
+    } yield{
+      res
+    }
+  }
+
+  def scrapeUrl(k: String, url: String, model: ScrapingModel[_], sem:Semaphore[F]): F[String] = {
     Uri.fromString(url) match {
       case Left(parseFailure)=>
         F.delay(s"$k => ${parseFailure.getMessage()}")
       case Right(uri) =>
         for {
           start <- clock.realTime(MILLISECONDS)
+          scrapeFunction: (Uri => F[(ScrapeDataRetrieval, Option[String])]) = (u :Uri)=> {httpClient.fetch(Request[F](Method.GET, u))(handleRawResponse(k, start, _))}
+          throttledScrapeFunction = Throttler.throttle(scrapeFunction,sem, 1.second)
           _ <- F.delay(log.info(s"$url"))
-          (sd, data) <- httpClient.fetch(Request[F](Method.GET, uri))(handleRawResponse(k, start, _))
+          (sd, data) <- throttledScrapeFunction(uri)
           sr = data.map(s => ScrapeResult(k, model.scrape(k, s)))
           _<- F.delay(log.info(s"$k=>$sd ${data.map(_.length).getOrElse(-1)}  ${sr.map(_.updates.size).getOrElse(0)}"))
           req = sr.map(createUpdateRequest)
