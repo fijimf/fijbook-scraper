@@ -8,6 +8,8 @@ import com.fijimf.deepfij.schedule.model.UpdateCandidate
 import org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl
 import org.xml.sax.InputSource
 
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration._
 import scala.io.Source
 import scala.util.matching.Regex
 import scala.util.{Failure, Success, Try}
@@ -24,6 +26,8 @@ case class Web1NcaaScraper(season:Int) extends TeamBasedScrapingModel {
   override def scrape(key:String, data: String): List[UpdateCandidate] = Web1NcaaParser.parseGames(key, data)
 
   override def modelKey(k: String): String = k
+
+  override val rateLimit: (Long, FiniteDuration) = (1L, 1.second)
 }
 
 object Web1NcaaParser{

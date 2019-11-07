@@ -11,7 +11,7 @@ import com.fijimf.deepfij.scraping.model.{DateBasedScrapingModel, ScrapingModel,
 import org.apache.commons.codec.digest.DigestUtils
 import org.http4s.EntityDecoder.text
 import org.http4s.client.Client
-import org.http4s.{Method, Request, Response, Status, Uri}
+import org.http4s.{Header, Method, Request, Response, Status, Uri}
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
@@ -99,12 +99,15 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
       case Right(uri) =>
         for {
           start <- clock.realTime(MILLISECONDS)
-          scrapeFunction: (Uri => F[(ScrapeDataRetrieval, Option[String])]) = (u :Uri)=> {httpClient.fetch(Request[F](Method.GET, u))(handleRawResponse(k, start, _))}
+          scrapeFunction: (Uri => F[(ScrapeDataRetrieval, Option[String])]) = (u :Uri)=> {httpClient.fetch(
+            Request[F](Method.POST, u).withHeaders(Header.apply("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36"))
+          )(handleRawResponse(k, start, _))}
           throttledScrapeFunction = Throttler.throttle(scrapeFunction,sem, 1.second)
           _ <- F.delay(log.info(s"$url"))
           (sd, data) <- throttledScrapeFunction(uri)
           sr = data.map(s => ScrapeResult(k, model.scrape(k, s)))
           _<- F.delay(log.info(s"$k=>$sd ${data.map(_.length).getOrElse(-1)}  ${sr.map(_.updates.size).getOrElse(0)}"))
+          _<- F.delay(log.info(s"\n${sr.map(_.updates.mkString("\n"))}"))
           req = sr.map(createUpdateRequest)
           t <- req match {
             case Some(r) => httpClient.expect[String](r)
@@ -116,6 +119,5 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
     }
 
   }
-
 }
 case class ScrapeDataRetrieval(key:String, statusCode:Int, requestLatency:Long, size:Int, digest:String)

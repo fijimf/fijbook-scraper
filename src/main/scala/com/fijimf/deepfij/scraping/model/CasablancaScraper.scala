@@ -5,7 +5,10 @@ import java.time.{Instant, LocalDate, LocalDateTime, ZoneId}
 
 import cats.implicits._
 import com.fijimf.deepfij.schedule.model.UpdateCandidate
+import com.fijimf.deepfij.scraping.services.Scraper
+import org.slf4j.LoggerFactory
 
+import scala.concurrent.duration.{FiniteDuration, _}
 import scala.util.{Failure, Success, Try}
 
 case class CasablancaScraper(season: Int) extends DateBasedScrapingModel {
@@ -19,6 +22,7 @@ case class CasablancaScraper(season: Int) extends DateBasedScrapingModel {
 
   override def scrape(key:String, data: String): List[UpdateCandidate] = CasablancaParser.parseGames(data)
 
+  override val rateLimit: (Long, FiniteDuration) = (9999L, 1.second)
 }
 
 object CasablancaParser {
@@ -26,21 +30,28 @@ object CasablancaParser {
   import io.circe.optics.JsonPath._
   import io.circe.parser._
 
+  val log = LoggerFactory.getLogger(CasablancaParser.getClass)
 
   def parseGames(s: String): List[UpdateCandidate] = {
-    val json: Json = parse(s).getOrElse(Json.Null)
-    extractGames(json).flatMap(g => {
-      for {
-        t <- extractStartTime(g)
-        h <- extractHomeTeam(g)
-        a <- extractAwayTeam(g)
-      } yield {
-        parseResult(g) match {
-          case Some((hs, as, n)) => UpdateCandidate(t, h, a, None, None, Some(hs), Some(as), Some(n))
-          case None => UpdateCandidate(t, h, a, None, None, None, None, None)
-        }
-      }
-    })
+    parse(s) match {
+      case Left(parsingFailure)=>
+        log.error(s"Failed to parse JSON ${parsingFailure.getMessage()}")
+        List.empty[UpdateCandidate]
+      case Right(json)=>
+        extractGames(json).flatMap(g => {
+          for {
+            t <- extractStartTime(g)
+            h <- extractHomeTeam(g)
+            a <- extractAwayTeam(g)
+          } yield {
+            parseResult(g) match {
+              case Some((hs, as, n)) => UpdateCandidate(t, h, a, None, None, Some(hs), Some(as), Some(n))
+              case None => UpdateCandidate(t, h, a, None, None, None, None, None)
+            }
+          }
+        })
+    }
+
   }
 
   def loadAsJson(s: String): Json = parse(s).getOrElse(Json.Null)
@@ -76,7 +87,9 @@ object CasablancaParser {
       root.home.score.string.getOption(json).toList.map(_.toInt)
     } match {
       case Success(lst) => lst
-      case Failure(exception) => List.empty[Int]
+      case Failure(exception) =>
+        log.warn(s"Failed parsing home score ${exception.getMessage()}")
+        List.empty[Int]
     }
   }
 
@@ -89,7 +102,9 @@ object CasablancaParser {
       root.away.score.string.getOption(json).toList.map(_.toInt)
     } match {
       case Success(lst) => lst
-      case Failure(exception) => List.empty[Int]
+      case Failure(exception) =>
+        log.warn(s"Failed parsing away score ${exception.getMessage()}")
+        List.empty[Int]
     }
   }
 
