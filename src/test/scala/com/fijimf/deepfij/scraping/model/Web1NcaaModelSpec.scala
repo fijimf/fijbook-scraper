@@ -98,5 +98,4 @@ class Web1NcaaModelSpec extends FunSpec {
       }
     }
   }
-
 }
