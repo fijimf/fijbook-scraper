@@ -22,7 +22,7 @@ class DoobieTypecheckSpec extends DbIntegrationSpec {
         check(ScrapeJob.Dao.find(99L))
       }
 
-      it("findByLoadKey should typecheck") {
+      it("findBySeason should typecheck") {
         check(ScrapeJob.Dao.findBySeason(2020))
       }
 
@@ -36,6 +36,35 @@ class DoobieTypecheckSpec extends DbIntegrationSpec {
 
       it("truncate should typecheck") {
         check(ScrapeJob.Dao.truncate())
+      }
+    }
+    describe("ScrapeRequest.Dao") {
+      it("insert should typecheck") {
+        check(ScrapeRequest.Dao.insert(ScrapeRequest(0L, 3L, "33", LocalDateTime.now(), 200, "jaDLlajdhljshdkjlD",15,0 )))
+      }
+
+      it("list should typecheck") {
+        check(ScrapeRequest.Dao.list())
+      }
+
+      it("find should typecheck") {
+        check(ScrapeRequest.Dao.find(99L))
+      }
+
+      it("findBySeason should typecheck") {
+        check(ScrapeRequest.Dao.findByScrapeJob(3L))
+      }
+
+      it("delete should typecheck") {
+        check(ScrapeRequest.Dao.delete(99L))
+      }
+
+      it("update should typecheck") {
+        check(ScrapeRequest.Dao.update(ScrapeRequest(9L, 3L, "33", LocalDateTime.now(), 200, "jaDLlajdhljshdkjlD",15,0 )))
+      }
+
+      it("truncate should typecheck") {
+        check(ScrapeRequest.Dao.truncate())
       }
     }
   }

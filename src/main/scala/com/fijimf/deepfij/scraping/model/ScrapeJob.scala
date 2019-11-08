@@ -14,7 +14,6 @@ case class ScrapeJob(id: Long, updateOrFill: String, season: Int, startedAt: Loc
 object ScrapeJob {
 
   object Dao extends AbstractDao {
-    implicit val localDateTimeMeta: Meta[LocalDateTime] = Meta[Timestamp].imap(ts => ts.toLocalDateTime)(ldt => Timestamp.valueOf(ldt))
 
     override def cols: Array[String] = Array("id", "update_or_fill", "season", "started_at", "completed_at")
 

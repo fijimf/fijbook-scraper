@@ -10,7 +10,7 @@ CREATE TABLE scrape_job
 CREATE TABLE scrape_request
 (
     id BIGSERIAL PRIMARY KEY,
-    job_id BIGINT NOT NULL,
+    job_id BIGINT NOT NULL REFERENCES scrape_job(id),
     model_key VARCHAR(20) NOT NULL,
     requested_at TIMESTAMP NOT NULL,
     status_code INT NOT NULL,

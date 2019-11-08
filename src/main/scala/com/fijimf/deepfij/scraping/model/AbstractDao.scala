@@ -1,10 +1,16 @@
 package com.fijimf.deepfij.scraping.model
 
+import java.sql.Timestamp
+import java.time.LocalDateTime
+
 import doobie.implicits._
+import doobie.util.Meta
 import doobie.util.fragment.Fragment
 import doobie.util.update.Update0
 
 trait AbstractDao {
+  implicit val localDateTimeMeta: Meta[LocalDateTime] = Meta[Timestamp].imap(ts => ts.toLocalDateTime)(ldt => Timestamp.valueOf(ldt))
+
   def cols: Array[String]
   def tableName:String
 
