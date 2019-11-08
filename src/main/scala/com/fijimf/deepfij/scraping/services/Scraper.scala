@@ -79,6 +79,7 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
       end <- clock.realTime(MILLISECONDS)
       data <- if (ok) resp.as[String] else F.pure("")
     } yield {
+      println(s"--->>|$data|<<---")
       (ScrapeDataRetrieval(key, statusCode, end - start, data.length, DigestUtils.md5Hex(data)), if (ok) Some(data) else None)
     }
   }
