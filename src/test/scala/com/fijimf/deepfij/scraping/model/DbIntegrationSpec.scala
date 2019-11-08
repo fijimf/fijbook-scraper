@@ -44,7 +44,6 @@ abstract class DbIntegrationSpec extends FunSpec with BeforeAndAfterAll with Mat
       .toList
       .filter(_.names().contains(containerName))
       .foreach(c => {
-        println(s"Killing and removing ${c.id()}")
         docker.killContainer(c.id())
         docker.removeContainer(c.id())
       })

@@ -40,7 +40,7 @@ object Web1NcaaParser{
   def extractGameRows(root: Node): NodeSeq = {
     (root \ "body" \ "table" \\ "tr")
       .filter(n=>
-        checkAttributeEquals(n, "class", "text") //&& checkTdForPercent(n)
+        checkAttributeEquals(n, "class", "text") && checkTdForPercent(n)
       )
   }
 
@@ -139,10 +139,7 @@ object Web1NcaaParser{
 
   def checkTdForPercent(node:Node):Boolean ={
     val option: Option[Node] = (node \ "td").headOption
-    println(s"=========..m.....>>>>${option.map(_.text)}")
-    println(s"=========..m.....>>>>${option.map(_.text.contains("%"))}")
-
-    option.map(_.text.contains("%")).getOrElse(false)
+    option.exists(_.text.contains("%"))
   }
 }
 

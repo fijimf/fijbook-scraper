@@ -72,9 +72,7 @@ class CasablancaSpec extends FunSpec {
 
     it("Extracts games for valid JSON"){
       val candidates: List[UpdateCandidate] = CasablancaParser.parseGames(cb0205)
-candidates.foreach(println(_))
       assert(candidates.size === 24)
-
     }
   }
 
