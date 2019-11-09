@@ -3,6 +3,7 @@ CREATE TABLE scrape_job
     id   BIGSERIAL PRIMARY KEY,
     update_or_fill VARCHAR(8) NOT NULL,
     season INT NOT NULL,
+    model VARCHAR(24) NOT NULL,
     started_at TIMESTAMP NOT NULL,
     completed_at TIMESTAMP NULL
 );

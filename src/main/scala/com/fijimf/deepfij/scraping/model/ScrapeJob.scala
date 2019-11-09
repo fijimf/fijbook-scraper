@@ -7,7 +7,7 @@ import doobie.implicits._
 import doobie.util.Meta
 import doobie.util.update.Update0
 
-case class ScrapeJob(id: Long, updateOrFill: String, season: Int, startedAt: LocalDateTime, completedAt: Option[LocalDateTime]) {
+case class ScrapeJob(id: Long, updateOrFill: String, season: Int, model:String, startedAt: LocalDateTime, completedAt: Option[LocalDateTime]) {
 
 }
 
@@ -15,17 +15,17 @@ object ScrapeJob {
 
   object Dao extends AbstractDao {
 
-    override def cols: Array[String] = Array("id", "update_or_fill", "season", "started_at", "completed_at")
+    override def cols: Array[String] = Array("id", "update_or_fill", "season", "model", "started_at", "completed_at")
 
     override def tableName: String = "scrape_job"
 
     def insert(sj: ScrapeJob): Update0 =
-      (fr"""INSERT INTO scrape_job(update_or_fill, season, started_at, completed_at )
-            VALUES (${sj.updateOrFill},${sj.season},${sj.startedAt},${sj.completedAt})
+      (fr"""INSERT INTO scrape_job(update_or_fill, season, model, started_at, completed_at )
+            VALUES (${sj.updateOrFill},${sj.season}, ${sj.model},  ${sj.startedAt},${sj.completedAt})
             RETURNING """ ++ colFr).update
 
     def update(sj: ScrapeJob): Update0 =
-      (fr"""UPDATE scrape_job SET update_or_fill = ${sj.updateOrFill}, season = ${sj.season}, started_at = ${sj.startedAt}, completed_at = ${sj.completedAt}
+      (fr"""UPDATE scrape_job SET update_or_fill = ${sj.updateOrFill}, season = ${sj.season}, model= ${sj.model}, started_at = ${sj.startedAt}, completed_at = ${sj.completedAt}
             WHERE id=${sj.id}
             RETURNING """ ++ colFr).update
 

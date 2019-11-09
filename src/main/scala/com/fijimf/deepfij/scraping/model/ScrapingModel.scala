@@ -12,7 +12,7 @@ trait ScrapingModel[T] {
 
   val season:Int
 
-  val rateLimit:(Long, FiniteDuration)
+  val rateLimit:Option[(Long, FiniteDuration)]
 
   def keys:List[T]
 
