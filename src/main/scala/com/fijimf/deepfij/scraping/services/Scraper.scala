@@ -24,18 +24,14 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   implicit def intEntityDecoder: EntityDecoder[F, Int] = jsonOf
 
   //TODO
-  // 1. Fix Scraping Repo
   // 2. Add throttling back
   // 3. Add the optimizations based on digest
 
   def fill(season: Int): F[List[ScrapeRequest]] = {
     scrapers.get(season) match {
-      case Some(d: DateBasedScrapingModel) =>
+      case Some(d: ScrapingModel[_]) =>
         F.delay(log.info(s"For season $season found model ${d.modelName}."))
         buildFillJob(season, d)
-      case Some(t: TeamBasedScrapingModel) =>
-        F.delay(log.info(s"For season $season found model ${t.modelName}."))
-        buildFillJob(season, t)
       case _ =>
         F.delay(List("Could not find appropriate model"))
         F.pure(List.empty[ScrapeRequest])
@@ -44,7 +40,7 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   }
 
   def update(season: Int, yyyymmdd:String): F[List[ScrapeRequest]] = {
-    val asOf= LocalDate.parse(yyyymmdd,DateTimeFormatter.ofPattern("yyyyMMdd"))
+    val asOf: LocalDate = LocalDate.parse(yyyymmdd,DateTimeFormatter.ofPattern("yyyyMMdd"))
     scrapers.get(season) match {
       case Some(d: DateBasedScrapingModel) =>
         F.delay(log.info(s"For season $season found model ${d.modelName}."))
