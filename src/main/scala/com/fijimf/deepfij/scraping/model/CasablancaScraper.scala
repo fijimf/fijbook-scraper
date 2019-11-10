@@ -22,7 +22,7 @@ case class CasablancaScraper(season: Int) extends DateBasedScrapingModel {
 
   override def scrape(key:String, data: String): List[UpdateCandidate] = CasablancaParser.parseGames(data)
 
-  override val rateLimit: (Long, FiniteDuration) = (9999L, 1.second)
+  override val rateLimit: Option[(Long, FiniteDuration)] = None
 }
 
 object CasablancaParser {

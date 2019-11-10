@@ -1,8 +1,6 @@
 package com.fijimf.deepfij.scraping.model
 
-import java.time.{LocalDate, LocalDateTime}
-
-import com.fijimf.deepfij.schedule.model.{Alias, Conference, ConferenceMapping, Game, Result, Season, Team}
+import java.time.LocalDateTime
 
 class DoobieTypecheckSpec extends DbIntegrationSpec {
   val containerName = "doobie-typecheck-spec"
@@ -11,7 +9,7 @@ class DoobieTypecheckSpec extends DbIntegrationSpec {
   describe("Doobie typechecking Dao's") {
     describe("ScrapeJob.Dao") {
       it("insert should typecheck") {
-        check(ScrapeJob.Dao.insert(ScrapeJob(0L, "update", 2020, LocalDateTime.now(),None )))
+        check(ScrapeJob.Dao.insert(ScrapeJob(0L, "update", 2020, "casablanca", LocalDateTime.now(), None)))
       }
 
       it("list should typecheck") {
@@ -31,7 +29,7 @@ class DoobieTypecheckSpec extends DbIntegrationSpec {
       }
 
       it("update should typecheck") {
-        check(ScrapeJob.Dao.update(ScrapeJob(1L, "update", 2020, LocalDateTime.now(),None )))
+        check(ScrapeJob.Dao.update(ScrapeJob(1L, "fill", 2020, "web1ncaa", LocalDateTime.now(), None)))
       }
 
       it("truncate should typecheck") {

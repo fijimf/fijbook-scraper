@@ -27,7 +27,7 @@ case class Web1NcaaScraper(season:Int) extends TeamBasedScrapingModel {
 
   override def modelKey(k: String): String = k
 
-  override val rateLimit: (Long, FiniteDuration) = (1L, 1.second)
+  override val rateLimit: Option[(Long, FiniteDuration)] = Some(1L, 1.second)
 }
 
 object Web1NcaaParser{

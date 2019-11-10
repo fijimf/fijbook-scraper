@@ -6,8 +6,9 @@ import com.fijimf.deepfij.scraping.model.{ScrapeJob, ScrapeRequest}
 import doobie.implicits._
 import doobie.util.transactor.Transactor
 
-class ScrapingRepo[F[_] : Sync](xa: Transactor[F]) extends AbstractScrapingRepo [F]{
+case class ScrapingRepo[F[_] : Sync](xa: Transactor[F]) extends AbstractScrapingRepo [F]{
    val me: MonadError[F, Throwable] = implicitly[MonadError[F, Throwable]]
+
 
    def listScrapeJobs():F[List[ScrapeJob]] =ScrapeJob.Dao.list().to[List].transact(xa)
 

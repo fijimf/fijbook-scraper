@@ -1,5 +1,6 @@
 package com.fijimf.deepfij.scraping.services
 
+import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalDateTime}
 
 import cats.effect._
@@ -42,11 +43,12 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
 
   }
 
-  def update(season: Int): F[List[ScrapeRequest]] = {
+  def update(season: Int, yyyymmdd:String): F[List[ScrapeRequest]] = {
+    val asOf= LocalDate.parse(yyyymmdd,DateTimeFormatter.ofPattern("yyyyMMdd"))
     scrapers.get(season) match {
       case Some(d: DateBasedScrapingModel) =>
         F.delay(log.info(s"For season $season found model ${d.modelName}."))
-        buildUpdateJob(season, d)
+        buildUpdateJob(season, d, asOf)
       case _ =>
         F.delay(List("Could not find appropriate model"))
         F.pure(List.empty[ScrapeRequest])
@@ -54,13 +56,13 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
 
   }
 
-  def buildUpdateJob[T](season: Int, m: DateBasedScrapingModel): F[List[ScrapeRequest]] = {
+  def buildUpdateJob[T](season: Int, m: DateBasedScrapingModel, asOf:LocalDate): F[List[ScrapeRequest]] = {
     ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None)
     for {
       _ <- F.delay(log.info(s"For season $season found model ${m.modelName}."))
       sj <- repo.insertScrapeJob(ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None))
       f = buildFunction(m, sj)
-      resps <- m.updateKeys(LocalDate.now()).map(f).sequence
+      resps <- m.updateKeys(asOf).map(f).sequence
     } yield {
       resps
     }
