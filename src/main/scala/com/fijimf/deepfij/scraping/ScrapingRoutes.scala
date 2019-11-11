@@ -1,5 +1,8 @@
 package com.fijimf.deepfij.scraping
 
+
+import com.fijimf.deepfij.scraping.model._
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -37,16 +40,16 @@ object ScrapingRoutes {
     HttpRoutes.of[F] {
       case GET -> Root / "fill" / IntVar(season) =>
         for {
-          results<-scraper.fill(season)
-          resp <- Ok(results.mkString("\n"))
+          job<-scraper.fill(season)
+          resp <- Ok(job)
         } yield {
           resp
         }
       case req@GET -> Root / "update" / IntVar(season) =>
         for {
           yyyymmdd <- F.delay( req.params.getOrElse("asof", DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now())))
-          results<-scraper.update(season, yyyymmdd)
-          resp <- Ok(results.mkString("\n"))
+          job<-scraper.update(season, yyyymmdd)
+          resp <- Ok(job)
         } yield {
           resp
         }

@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalDateTime}
 
 import cats.effect._
+import cats.effect.implicits._
 import cats.implicits._
 import com.fijimf.deepfij.schedule.model.ScrapeResult
 import com.fijimf.deepfij.scraping.model._
@@ -15,7 +16,7 @@ import org.http4s.{EntityDecoder, EntityEncoder, Header, Method, Request, Respon
 import org.slf4j.{Logger, LoggerFactory}
 
 
-case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]], repo: ScrapingRepo[F])(implicit F: ConcurrentEffect[F], cs: ContextShift[F], clock: Clock[F], tim: Timer[F]) {
+case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]], repo: ScrapingRepo[F])(implicit F: Concurrent[F], cs: ContextShift[F], clock: Clock[F], tim: Timer[F]) {
   val log: Logger = LoggerFactory.getLogger(Scraper.getClass)
   val header: Header = Header.apply("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36")
 
@@ -29,19 +30,19 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   // 4. Update check not working
   // 5. Immediate return not working
 
-  def fill(season: Int): F[List[ScrapeRequest]] = {
+  def fill(season: Int): F[ScrapeJob] = {
     scrapers.get(season) match {
       case Some(d: ScrapingModel[_]) =>
         F.delay(log.info(s"For season $season found model ${d.modelName}."))
         buildFillJob(season, d)
       case _ =>
         F.delay(List("Could not find appropriate model"))
-        F.pure(List.empty[ScrapeRequest])
+        F.delay(ScrapeJob(-1L, "fill",season,"notfound", LocalDateTime.now(),None))
     }
 
   }
 
-  def update(season: Int, yyyymmdd:String): F[List[ScrapeRequest]] = {
+  def update(season: Int, yyyymmdd:String): F[ScrapeJob] = {
     val asOf: LocalDate = LocalDate.parse(yyyymmdd,DateTimeFormatter.ofPattern("yyyyMMdd"))
     scrapers.get(season) match {
       case Some(d: DateBasedScrapingModel) =>
@@ -49,32 +50,30 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
         buildUpdateJob(season, d, asOf)
       case _ =>
         F.delay(List("Could not find appropriate model"))
-        F.pure(List.empty[ScrapeRequest])
+        F.delay(ScrapeJob(-1L, "update",season,"notfound", LocalDateTime.now(),None))
     }
 
   }
 
-  def buildUpdateJob[T](season: Int, m: DateBasedScrapingModel, asOf:LocalDate): F[List[ScrapeRequest]] = {
-    ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None)
+  def buildUpdateJob[T](season: Int, m: DateBasedScrapingModel, asOf:LocalDate): F[ScrapeJob] = {
     for {
       _ <- F.delay(log.info(s"For season $season found model ${m.modelName}."))
-      sj <- repo.insertScrapeJob(ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None))
+      sj <- repo.insertScrapeJob(ScrapeJob(0L, "update", season, m.modelName, LocalDateTime.now(), None))
       f = buildFunction(m, sj)
-      resps <- m.updateKeys(asOf).map(f).sequence
+      _ <- (cs.shift *> (m.updateKeys(asOf).map(f).sequence).start)
     } yield {
-      resps
+      sj
     }
   }
 
-  def buildFillJob[T](season: Int, m: ScrapingModel[T]): F[List[ScrapeRequest]] = {
-    ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None)
+  def buildFillJob[T](season: Int, m: ScrapingModel[T]): F[ScrapeJob] = {
     for {
       _ <- F.delay(log.info(s"For season $season found model ${m.modelName}."))
       sj <- repo.insertScrapeJob(ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None))
       f = buildFunction(m, sj)
-      resps <- m.keys.map(f).sequence
+      _ <- (cs.shift *> (m.keys.map(f).sequence).start)
     } yield {
-      resps
+      sj
     }
   }
 

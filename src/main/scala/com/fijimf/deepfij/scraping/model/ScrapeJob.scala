@@ -1,10 +1,8 @@
 package com.fijimf.deepfij.scraping.model
 
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import doobie.implicits._
-import doobie.util.Meta
 import doobie.util.update.Update0
 
 case class ScrapeJob(id: Long, updateOrFill: String, season: Int, model:String, startedAt: LocalDateTime, completedAt: Option[LocalDateTime]) {
