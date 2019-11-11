@@ -8,9 +8,7 @@ import com.fijimf.deepfij.schedule.model.UpdateCandidate
 import org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl
 import org.xml.sax.InputSource
 
-import scala.concurrent.duration.FiniteDuration
-import scala.concurrent.duration._
-import scala.io.Source
+import scala.concurrent.duration.{FiniteDuration, _}
 import scala.util.matching.Regex
 import scala.util.{Failure, Success, Try}
 import scala.xml.parsing.NoBindingFactoryAdapter
@@ -48,7 +46,7 @@ object Web1NcaaParser{
     loadFromString(data) match {
       case Success(root)=>
         extractUpdates(key, root)
-      case Failure(thr)=>List.empty[UpdateCandidate]
+      case Failure(_)=>List.empty[UpdateCandidate]
     }
   }
 
@@ -62,10 +60,10 @@ object Web1NcaaParser{
 
 
   def extractGame(teamId:Int,row:Node):Option[UpdateCandidate] = {
-    val cells: NodeSeq = (row \ "td")
+    val cells: NodeSeq = row \ "td"
     if (cells.headOption.exists(_.text.contains("%"))){
       cells.toList match {
-        case oppNode::dateNode::scoreNode::oppScoreNode::homeAwayNode::siteNode::otNode::attendenceNode::Nil=>
+        case oppNode::dateNode::scoreNode::oppScoreNode::homeAwayNode::_::otNode::_::Nil=>
           val oppId: Int = oppNodeToCode(oppNode)
           val dateTime: LocalDateTime = LocalDate.parse(dateNode.text.trim, DateTimeFormatter.ofPattern("MM/dd/yyyy")).atStartOfDay()
           val homeAway:String = homeAwayNode.text.trim
@@ -76,28 +74,9 @@ object Web1NcaaParser{
           for {
             team<-Web1NcaaKey.codeToKey.get(teamId)
             opponent<-Web1NcaaKey.codeToKey.get(oppId)
+            uc<-buildUpdateCandidate(teamId, oppId, dateTime, homeAway, score, oppScore, otString, team, opponent)
           } yield {
-            val (ht, hs, at, as) = if (homeAway.equalsIgnoreCase("home")) {
-              (team, score, opponent, oppScore)
-            } else if (homeAway.equalsIgnoreCase("away")) {
-              (opponent, oppScore, team, score)
-            } else {
-              if (teamId < oppId) {
-                (team, score, opponent, oppScore)
-              } else {
-                (opponent, oppScore, team, score)
-              }
-            }
-            UpdateCandidate(
-              dateTime,
-              ht,
-              at,
-              None,
-              Some(homeAway.equalsIgnoreCase("neutral")),
-              Some(hs),
-              Some(as),
-              Some(otStringToNumPeriods(otString))
-            )
+            uc
           }
         case _ =>None
       }
@@ -106,10 +85,35 @@ object Web1NcaaParser{
     }
   }
 
+  private def buildUpdateCandidate(teamId: Int, oppId: Int, dateTime: LocalDateTime, homeAway: String, score: Int, oppScore: Int, otString: String, team: String, opponent: String): Option[UpdateCandidate] = {
+    val (ht, hs, at, as) = if (homeAway.equalsIgnoreCase("home")) {
+      (team, score, opponent, oppScore)
+    } else if (homeAway.equalsIgnoreCase("away")) {
+      (opponent, oppScore, team, score)
+    } else {
+      if (teamId < oppId) {
+        (team, score, opponent, oppScore)
+      } else {
+        (opponent, oppScore, team, score)
+      }
+    }
+    if (team === ht)
+      Some(UpdateCandidate(
+        dateTime,
+        ht,
+        at,
+        None,
+        Some(homeAway.equalsIgnoreCase("neutral")),
+        Some(hs),
+        Some(as),
+        Some(otStringToNumPeriods(otString))
+      )) else None
+  }
+
   def oppNodeToCode(oppNode:Node): Int ={
     val extractor: Regex = """javascript:showTeamResults\((\d+)\);""".r
     (for {
-      a <- (oppNode \ "a")
+      a <- oppNode \ "a"
       hr <- a.attribute("href")
       hr0 <- hr.headOption
     }yield {

@@ -88,13 +88,13 @@ class Web1NcaaModelSpec extends FunSpec {
         case Failure(thr) => fail(thr)
         case Success(root) =>
           val candidates: List[UpdateCandidate] = Web1NcaaParser.extractUpdates("51", root)
-          assert(candidates.size === 33)
+          assert(candidates.size === 22)
       }
       Web1NcaaParser.loadFromString(youngstownSt) match {
         case Failure(thr) => fail(thr)
         case Success(root) =>
           val candidates: List[UpdateCandidate] = Web1NcaaParser.extractUpdates("817", root)
-          assert(candidates.size === 30)
+          assert(candidates.size === 10)
       }
     }
   }

@@ -26,6 +26,8 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   //TODO
   // 2. Add throttling back
   // 3. Add the optimizations based on digest
+  // 4. Update check not working
+  // 5. Immediate return not working
 
   def fill(season: Int): F[List[ScrapeRequest]] = {
     scrapers.get(season) match {

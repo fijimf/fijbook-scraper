@@ -20,4 +20,4 @@ CREATE TABLE scrape_request
     updates_accepted INT NOT NULL
 );
 
-CREATE UNIQUE INDEX ON scrape_request(model_key);
+CREATE UNIQUE INDEX ON scrape_request(job_id, model_key);
