@@ -6,7 +6,7 @@ import java.time.{LocalDate, LocalDateTime}
 import cats.effect._
 import cats.effect.implicits._
 import cats.implicits._
-import com.fijimf.deepfij.schedule.model.ScrapeResult
+import com.fijimf.deepfij.schedule.model.{ScrapeResult, UpdateCandidate}
 import com.fijimf.deepfij.scraping.model._
 import org.apache.commons.codec.digest.DigestUtils
 import org.http4s.EntityDecoder.text
@@ -27,8 +27,6 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   //TODO
   // 2. Add throttling back
   // 3. Add the optimizations based on digest
-  // 4. Update check not working
-  // 5. Immediate return not working
 
   def fill(season: Int): F[ScrapeJob] = {
     scrapers.get(season) match {
@@ -58,9 +56,11 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   def buildUpdateJob[T](season: Int, m: DateBasedScrapingModel, asOf:LocalDate): F[ScrapeJob] = {
     for {
       _ <- F.delay(log.info(s"For season $season found model ${m.modelName}."))
+      reqMap<- repo.findScrapeRequestByLatestJob(season, m.modelName).map(_.map(sr=>sr.modelKey->sr).toMap)
       sj <- repo.insertScrapeJob(ScrapeJob(0L, "update", season, m.modelName, LocalDateTime.now(), None))
-      f = buildFunction(m, sj)
-      _ <- (cs.shift *> (m.updateKeys(asOf).map(f).sequence).start)
+      f = buildFunction(m, sj, reqMap)
+      _ <- cs.shift *> (m.updateKeys(asOf).map(f).sequence.flatMap(_=> repo.updateScrapeJob(sj.copy(completedAt = Some(LocalDateTime.now()))))).start
+
     } yield {
       sj
     }
@@ -69,27 +69,36 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   def buildFillJob[T](season: Int, m: ScrapingModel[T]): F[ScrapeJob] = {
     for {
       _ <- F.delay(log.info(s"For season $season found model ${m.modelName}."))
+      reqMap<- repo.findScrapeRequestByLatestJob(season, m.modelName).map(_.map(sr=>sr.modelKey->sr).toMap)
       sj <- repo.insertScrapeJob(ScrapeJob(0L, "fill", season, m.modelName, LocalDateTime.now(), None))
-      f = buildFunction(m, sj)
-      _ <- (cs.shift *> (m.keys.map(f).sequence).start)
+      f = buildFunction(m, sj, reqMap)
+      _ <- cs.shift *> (m.keys.map(f).sequence.flatMap(_=>repo.updateScrapeJob(sj.copy(completedAt = Some(LocalDateTime.now()))))).start
     } yield {
       sj
     }
   }
 
-  def buildFunction[T](m: ScrapingModel[T], j: ScrapeJob): T => F[ScrapeRequest] = {
+  def buildFunction[T](m: ScrapingModel[T], j: ScrapeJob, mr:Map[String, ScrapeRequest]): T => F[ScrapeRequest] = {
     def handleRawResponse(sr: ScrapeRequest, resp: Response[F]): F[ScrapeRequest] = {
       val statusCode: Int = resp.status.code
       if (statusCode === Status.Ok.code) {
         for {
           data <- resp.as[String]
-          result = ScrapeResult(sr.modelKey, m.scrape(sr.modelKey, data))
+          digest = DigestUtils.md5Hex(data)
+          result = if (mr.get(sr.modelKey).exists(_.digest===digest)) {
+            log.info(s"Web page unchanged for ${sr.modelKey}.  Will not create updates.")
+            ScrapeResult(sr.modelKey, List.empty[UpdateCandidate])
+          } else {
+            val ucs: List[UpdateCandidate] = m.scrape(sr.modelKey, data)
+            log.info(s"${sr.modelKey}.  Generated ${ucs.size} updates.")
+            ScrapeResult(sr.modelKey, ucs)
+          }
           updateRequest = createUpdateRequest(result)
           updatesMade <- httpClient.expect[Int](updateRequest)
           savedResult <- repo.insertScrapeRequest(
             sr.copy(
               statusCode = statusCode,
-              digest = DigestUtils.md5Hex(data),
+              digest = digest,
               updatesProposed = result.updates.size,
               updatesAccepted = updatesMade
             )

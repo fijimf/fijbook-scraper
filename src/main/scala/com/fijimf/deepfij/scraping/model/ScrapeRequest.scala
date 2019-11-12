@@ -40,6 +40,16 @@ object ScrapeRequest {
 
     def findByScrapeJob(scrapeJobId: Long): doobie.Query0[ScrapeRequest] = (baseQuery ++ fr" WHERE job_id = $scrapeJobId").query[ScrapeRequest]
 
+    def findByLatestScrape(season:Int, model:String): doobie.Query0[ScrapeRequest] = (baseQuery ++
+      fr"""WHERE STATUS_CODE = 200 AND JOB_ID = (
+             SELECT id
+             FROM scrape_job
+             WHERE completed_at = (
+               SELECT MAX(completed_at) FROM scrape_job WHERE season = $season AND model = $model
+             )
+          )
+    """).query[ScrapeRequest]
+
     def list(): doobie.Query0[ScrapeRequest] = baseQuery.query[ScrapeRequest]
 
     def delete(id: Long): doobie.Update0 = sql"DELETE FROM scrape_request where id=$id".update

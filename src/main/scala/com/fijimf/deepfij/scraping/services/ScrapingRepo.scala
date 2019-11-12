@@ -15,7 +15,12 @@ case class ScrapingRepo[F[_] : Sync](xa: Transactor[F]) extends AbstractScraping
    def insertScrapeJob(sj: ScrapeJob): F[ScrapeJob] = ScrapeJob.Dao.insert(sj)
      .withUniqueGeneratedKeys[ScrapeJob](ScrapeJob.Dao.cols: _*)
      .transact(xa).exceptSql(ex => me.raiseError[ScrapeJob](ex))
+   def updateScrapeJob(sj: ScrapeJob): F[ScrapeJob] = ScrapeJob.Dao.update(sj)
+     .withUniqueGeneratedKeys[ScrapeJob](ScrapeJob.Dao.cols: _*)
+     .transact(xa).exceptSql(ex => me.raiseError[ScrapeJob](ex))
    def insertScrapeRequest(sr: ScrapeRequest): F[ScrapeRequest] = ScrapeRequest.Dao.insert(sr)
      .withUniqueGeneratedKeys[ScrapeRequest](ScrapeRequest.Dao.cols: _*)
      .transact(xa).exceptSql(ex => me.raiseError[ScrapeRequest](ex))
+   def findScrapeRequestByLatestJob(season:Int, model:String): F[List[ScrapeRequest]] =
+      ScrapeRequest.Dao.findByLatestScrape(season, model).to[List].transact(xa)
 }

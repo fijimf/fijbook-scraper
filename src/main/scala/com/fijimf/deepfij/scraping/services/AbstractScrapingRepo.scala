@@ -11,4 +11,5 @@ trait AbstractScrapingRepo[F[_]] {
 
   def listScrapeJobs():F[List[ScrapeJob]]
   def insertScrapeJob(sj: ScrapeJob): F[ScrapeJob]
+  def updateScrapeJob(sj: ScrapeJob): F[ScrapeJob]
 }
