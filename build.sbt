@@ -7,12 +7,20 @@ val TypesafeConfVersion = "1.3.4"
 val FlywayVersion = "6.0.3"
 
 
+enablePlugins(BuildInfoPlugin)
+enablePlugins(JavaAppPackaging)
+
 lazy val root = (project in file("."))
   .settings(
     organization := "com.fijimf.deepfij",
     name := "fijbook-scraper",
     version := "1.0.0",
     scalaVersion := "2.12.8",
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, buildInfoBuildNumber),
+    buildInfoPackage := "com.fijimf.deepfij.scraping",
+    buildInfoOptions += BuildInfoOption.BuildTime,
+    buildInfoOptions += BuildInfoOption.ToJson,
+
     libraryDependencies ++= Seq(
       "org.http4s"      %% "http4s-blaze-server" % Http4sVersion,
       "org.http4s"      %% "http4s-blaze-client" % Http4sVersion,

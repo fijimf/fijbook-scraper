@@ -5,6 +5,7 @@ import cats.syntax.semigroupk._
 import com.fijimf.deepfij.scraping.model.{CasablancaScraper, ScrapingModel, Web1NcaaScraper}
 import com.fijimf.deepfij.scraping.services.Scraper
 import com.fijimf.deepfij.scraping.services.ScrapingRepo
+import com.fijimf.deepfij.scraping.util.Banner
 import doobie.util.transactor.Transactor
 import fs2.Stream
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -35,6 +36,7 @@ object ScrapingServer {
         .withIdleTimeout(1.minutes)
         .withResponseHeaderTimeout(5.minutes)
         .withHttpApp(finalHttpApp)
+          .withBanner(Banner.banner)
         .serve
     } yield {
       exitCode

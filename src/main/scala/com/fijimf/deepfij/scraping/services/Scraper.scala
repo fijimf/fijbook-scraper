@@ -25,8 +25,7 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
   implicit def intEntityDecoder: EntityDecoder[F, Int] = jsonOf
 
   //TODO
-  // 2. Add throttling back
-  // 3. Add the optimizations based on digest
+  // 1. Show job status
 
   def fill(season: Int): F[ScrapeJob] = {
     scrapers.get(season) match {
