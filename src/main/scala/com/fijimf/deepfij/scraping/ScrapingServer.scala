@@ -21,7 +21,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object ScrapingServer {
 
   @SuppressWarnings(Array("org.wartremover.warts.Nothing", "org.wartremover.warts.Any"))
-  def stream[F[_] : ConcurrentEffect](transactor: Transactor[F])(implicit T: Timer[F], C: ContextShift[F]): Stream[F, ExitCode] = {
+  def stream[F[_] : ConcurrentEffect](transactor: Transactor[F], port:Int)(implicit T: Timer[F], C: ContextShift[F]): Stream[F, ExitCode] = {
 
 
     for {
@@ -33,7 +33,7 @@ object ScrapingServer {
       httpApp: HttpApp[F] = (healthcheckService <+> scrapingService).orNotFound
       finalHttpApp: HttpApp[F] = Logger.httpApp[F](logHeaders = true, logBody = true)(httpApp)
       exitCode <- BlazeServerBuilder[F]
-        .bindHttp(port = 8077, host = "0.0.0.0")
+        .bindHttp(port = port, host = "0.0.0.0")
         .withIdleTimeout(1.minutes)
         .withResponseHeaderTimeout(5.minutes)
         .withHttpApp(finalHttpApp)
