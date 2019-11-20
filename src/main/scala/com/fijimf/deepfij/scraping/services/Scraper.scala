@@ -16,13 +16,16 @@ import org.http4s.{EntityDecoder, EntityEncoder, Header, Method, Request, Respon
 import org.slf4j.{Logger, LoggerFactory}
 
 
-case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]], repo: ScrapingRepo[F])(implicit F: Concurrent[F], cs: ContextShift[F], clock: Clock[F], tim: Timer[F]) {
+case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel[_]], repo: ScrapingRepo[F], schedHost:String, schedPort:Int)(implicit F: Concurrent[F], cs: ContextShift[F], clock: Clock[F], tim: Timer[F]) {
   val log: Logger = LoggerFactory.getLogger(Scraper.getClass)
   val header: Header = Header.apply("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36")
 
   implicit def intEntityEncoder: EntityEncoder[F, Int] = jsonEncoderOf
 
   implicit def intEntityDecoder: EntityDecoder[F, Int] = jsonOf
+
+  val schedRequest:Request[F] = Request(Method.POST, Uri.fromString(s"http://$schedHost:$schedPort/update").toOption.getOrElse(uri"http://localhost:8074/update"))
+  val schedHealthcheck:Request[F] = Request(Method.GET, Uri.fromString(s"http://$schedHost:$schedPort/status").toOption.getOrElse(uri"http://localhost:8074/status"))
 
   //TODO
   // 1. Show job status
@@ -126,8 +129,15 @@ case class Scraper[F[_]](httpClient: Client[F], scrapers: Map[Int, ScrapingModel
     }
   }
 
-  def createUpdateRequest(sr: ScrapeResult): Request[F] = {
-    Request(Method.POST, uri"http://localhost:8074/update").withEntity(sr)
+  def createUpdateRequest(sr: ScrapeResult): Request[F] = schedRequest.withEntity(sr)
+
+  def healthcheck:F[Boolean]={
+    for {
+      f<-httpClient.status(schedHealthcheck)
+    } yield {
+      f.code==200
+    }
   }
+
 
 }

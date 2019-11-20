@@ -21,14 +21,16 @@ object ScrapingRoutes {
 
   implicit def intEntityEncoder[F[_] : Applicative]: EntityEncoder[F, Int] = jsonEncoderOf
 
-  def healthcheckRoutes[F[_]](r: ScrapingRepo[F])(implicit F: Sync[F]): HttpRoutes[F] = {
+  def healthcheckRoutes[F[_]](scraper:Scraper[F],r: ScrapingRepo[F])(implicit F: Sync[F]): HttpRoutes[F] = {
     val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
     import dsl._
     HttpRoutes.of[F] {
       case GET -> Root / "status" =>
         for {
-          status<-r.healthcheck.map(isOk=>ServerInfo.fromStatus(isOk))
-          resp <- if (status.isOk) Ok(status) else InternalServerError(status)
+          dbStatus<-r.healthcheck
+          schedStatus<- scraper.healthcheck
+          serverInfo = ServerInfo.fromStatus(Map("database"->dbStatus,"scheduleServer"->schedStatus))
+          resp <- if (serverInfo.isOk) Ok(serverInfo) else InternalServerError(serverInfo)
         } yield {
           resp
         }

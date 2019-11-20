@@ -2,7 +2,7 @@ package com.fijimf.deepfij.scraping
 
 import java.sql.{Connection, DriverManager}
 
-import cats.effect.{ExitCode, IO, IOApp, Resource, Timer}
+import cats.effect._
 import cats.implicits._
 import com.typesafe.config.{Config, ConfigFactory}
 import doobie.hikari.HikariTransactor
@@ -39,8 +39,10 @@ object Main extends IOApp {
       for {
         _ <- initDB(xa)
         port <- config.map(_.getInt("fijbook.scraping.port"))
+        schedHost <- config.map(_.getString("fijbook.scraping.schedule.host"))
+        schedPort <- config.map(_.getInt("fijbook.scraping.schedule.port"))
         exitCode <- ScrapingServer
-          .stream[IO]( xa, port)
+          .stream[IO](xa, port, schedHost, schedPort)
           .compile[IO, IO, ExitCode]
           .drain
           .as(ExitCode.Success)
