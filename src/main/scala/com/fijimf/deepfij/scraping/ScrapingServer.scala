@@ -22,13 +22,14 @@ object ScrapingServer {
 
   @SuppressWarnings(Array("org.wartremover.warts.Nothing", "org.wartremover.warts.Any"))
   def stream[F[_] : ConcurrentEffect](transactor: Transactor[F])(implicit T: Timer[F], C: ContextShift[F]): Stream[F, ExitCode] = {
-    val healthcheckService: HttpRoutes[F] = ScrapingRoutes.healthcheckRoutes()
+
 
     for {
       client <- BlazeClientBuilder[F](global).stream
       repo = ScrapingRepo[F](transactor)
       scraper = Scraper(client, Map(2019-> CasablancaScraper(2019), 2018->Web1NcaaScraper(2018)), repo)
       scrapingService: HttpRoutes[F] = ScrapingRoutes.scrapeRoutes(scraper)
+      healthcheckService: HttpRoutes[F] = ScrapingRoutes.healthcheckRoutes(repo)
       httpApp: HttpApp[F] = (healthcheckService <+> scrapingService).orNotFound
       finalHttpApp: HttpApp[F] = Logger.httpApp[F](logHeaders = true, logBody = true)(httpApp)
       exitCode <- BlazeServerBuilder[F]

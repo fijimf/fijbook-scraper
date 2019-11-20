@@ -9,7 +9,9 @@ import doobie.util.transactor.Transactor
 case class ScrapingRepo[F[_] : Sync](xa: Transactor[F]) extends AbstractScrapingRepo [F]{
    val me: MonadError[F, Throwable] = implicitly[MonadError[F, Throwable]]
 
-
+   def healthcheck:F[Boolean] = {
+      doobie.FC.isValid(2 /*timeout in seconds*/).transact(xa)
+   }
    def listScrapeJobs():F[List[ScrapeJob]] =ScrapeJob.Dao.list().to[List].transact(xa)
 
    def insertScrapeJob(sj: ScrapeJob): F[ScrapeJob] = ScrapeJob.Dao.insert(sj)

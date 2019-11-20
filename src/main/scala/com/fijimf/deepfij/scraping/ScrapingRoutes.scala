@@ -2,14 +2,14 @@ package com.fijimf.deepfij.scraping
 
 
 import com.fijimf.deepfij.scraping.model._
-
+import com.fijimf.deepfij.scraping.util._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import cats.Applicative
 import cats.effect.Sync
 import cats.implicits._
-import com.fijimf.deepfij.scraping.services.Scraper
+import com.fijimf.deepfij.scraping.services.{Scraper, ScrapingRepo}
 import org.http4s.circe.jsonEncoderOf
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{EntityEncoder, HttpRoutes}
@@ -21,13 +21,14 @@ object ScrapingRoutes {
 
   implicit def intEntityEncoder[F[_] : Applicative]: EntityEncoder[F, Int] = jsonEncoderOf
 
-  def healthcheckRoutes[F[_]]()(implicit F: Sync[F]): HttpRoutes[F] = {
+  def healthcheckRoutes[F[_]](r: ScrapingRepo[F])(implicit F: Sync[F]): HttpRoutes[F] = {
     val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
     import dsl._
     HttpRoutes.of[F] {
-      case GET -> Root / "healthcheck" =>
+      case GET -> Root / "status" =>
         for {
-          resp <- Ok()
+          status<-r.healthcheck.map(isOk=>ServerInfo.fromStatus(isOk))
+          resp <- if (status.isOk) Ok(status) else InternalServerError(status)
         } yield {
           resp
         }
