@@ -40,8 +40,10 @@ lazy val root = (project in file("."))
       "org.flywaydb"    % "flyway-core"          % FlywayVersion,
       "commons-codec"   % "commons-codec"        % "1.13",
       "com.spotify"     % "docker-client"        % "8.14.0",
+      "it.sauronsoftware.cron4j" % "cron4j"      % "2.2.5",
       "com.amazonaws"   % "aws-java-sdk-s3"      % "1.11.651",
       "org.ccil.cowan.tagsoup" %       "tagsoup" % "1.2.1",
+
       "com.fijimf.deepfij" %% "fijbook-schedule" % "1.0.2b"
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),

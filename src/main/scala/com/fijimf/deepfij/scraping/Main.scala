@@ -43,8 +43,9 @@ object Main extends IOApp {
         schedHost <- config.map(_.getString("fijbook.scraping.schedule.host"))
         schedPort <- config.map(_.getInt("fijbook.scraping.schedule.port"))
         scrapers <- config.map(ConfigUtils.loadScrapers)
+        jobs <- config.map(ConfigUtils.loadJobs)
         exitCode <- ScrapingServer
-          .stream[IO](xa, port, schedHost, schedPort, scrapers)
+          .stream[IO](xa, port, schedHost, schedPort, scrapers, jobs)
           .compile[IO, IO, ExitCode]
           .drain
           .as(ExitCode.Success)
