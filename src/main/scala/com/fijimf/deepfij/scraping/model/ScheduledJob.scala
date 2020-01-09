@@ -9,6 +9,7 @@ import cats.effect.{Clock, Concurrent, ContextShift, Timer}
 import cats.implicits._
 import com.fijimf.deepfij.scraping.services.Scraper
 import it.sauronsoftware.cron4j.{Predictor, SchedulingPattern}
+import org.slf4j.{Logger, LoggerFactory}
 
 case class ScheduledJob(season:Int, cronEntry:String, flavor:String) {
   require(SchedulingPattern.validate(cronEntry))
@@ -38,7 +39,7 @@ object ScheduledJob {
      }
    }
 
-  def schedule[F[_]](jobs:List[ScheduledJob], scraper:Scraper[F])(implicit F: Concurrent[F], cs: ContextShift[F], clock: Clock[F], tim: Timer[F]):F[List[Unit]]={
-     jobs.map(schedule(_,scraper)).sequence
-   }
+  def schedule[F[_]](jobs: List[ScheduledJob], scraper: Scraper[F])(implicit F: Concurrent[F], cs: ContextShift[F], clock: Clock[F], tim: Timer[F]): F[List[Unit]] = {
+    jobs.map(schedule(_, scraper)).sequence
+  }
 }
