@@ -4,12 +4,17 @@ import java.sql.{Connection, DriverManager}
 
 import cats.effect._
 import cats.implicits._
+import com.fijimf.deepfij.scraping.model.JobScheduler
+import com.fijimf.deepfij.scraping.services.{Scraper, ScrapingRepo}
 import com.fijimf.deepfij.scraping.util.ConfigUtils
 import com.typesafe.config.{Config, ConfigFactory}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import org.flywaydb.core.Flyway
+import org.http4s.client.Client
+import org.http4s.client.blaze.BlazeClientBuilder
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 object Main extends IOApp {
@@ -34,24 +39,31 @@ object Main extends IOApp {
       xa <- HikariTransactor.newHikariTransactor[IO](driver, url, user, password, ce, te)
     } yield xa
 
+  val client: Resource[IO, Client[IO]] =BlazeClientBuilder[IO](global).resource
 
   def run(args: List[String]): IO[ExitCode] = {
     transactor.use { xa =>
-      for {
-        _ <- initDB(xa)
-        port <- config.map(_.getInt("fijbook.scraping.port"))
-        schedHost <- config.map(_.getString("fijbook.scraping.schedule.host"))
-        schedPort <- config.map(_.getInt("fijbook.scraping.schedule.port"))
-        scrapers <- config.map(ConfigUtils.loadScrapers)
-        jobs <- config.map(ConfigUtils.loadJobs)
-        exitCode <- ScrapingServer
-          .stream[IO](xa, port, schedHost, schedPort, scrapers, jobs)
-          .compile[IO, IO, ExitCode]
-          .drain
-          .as(ExitCode.Success)
-      } yield {
-        exitCode
+      client.use { c =>
+        val repo: ScrapingRepo[IO] = ScrapingRepo[IO](xa)
 
+
+        for {
+          _ <- initDB(xa)
+          port <- config.map(_.getInt("fijbook.scraping.port"))
+          schedHost <- config.map(_.getString("fijbook.scraping.schedule.host"))
+          schedPort <- config.map(_.getInt("fijbook.scraping.schedule.port"))
+          scrapers <- config.map(ConfigUtils.loadScrapers)
+          scraper: Scraper[IO] = Scraper(c, scrapers, repo, schedHost, schedPort)
+          jobs <- config.map(ConfigUtils.loadJobs)
+          fibers<- JobScheduler[IO]().scheduleMany(jobs, scraper)
+          exitCode <- ScrapingServer
+            .stream[IO](xa, scraper, repo, port, c, schedHost, schedPort, scrapers)
+            .compile[IO, IO, ExitCode]
+            .drain
+            .as(ExitCode.Success)
+        } yield {
+          exitCode
+        }
       }
     }
   }
