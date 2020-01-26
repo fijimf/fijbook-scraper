@@ -1,6 +1,7 @@
 package com.fijimf.deepfij.scraping
 
 import java.sql.{Connection, DriverManager}
+import java.time.LocalDateTime
 
 import cats.effect._
 import cats.implicits._
@@ -55,7 +56,7 @@ object Main extends IOApp {
           scrapers <- config.map(ConfigUtils.loadScrapers)
           scraper: Scraper[IO] = Scraper(c, scrapers, repo, schedHost, schedPort)
           jobs <- config.map(ConfigUtils.loadJobs)
-          fibers<- JobScheduler[IO]().scheduleMany(jobs, scraper)
+          fibers<- JobScheduler[IO]().scheduleMany(jobs, scraper, LocalDateTime.now())
           exitCode <- ScrapingServer
             .stream[IO](xa, scraper, repo, port, c, schedHost, schedPort, scrapers)
             .compile[IO, IO, ExitCode]
