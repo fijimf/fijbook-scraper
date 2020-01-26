@@ -44,7 +44,7 @@ lazy val root = (project in file("."))
       "com.amazonaws"   % "aws-java-sdk-s3"      % "1.11.651",
       "org.ccil.cowan.tagsoup" %       "tagsoup" % "1.2.1",
 
-      "com.fijimf.deepfij" %% "fijbook-schedule" % "1.0.2b"
+      "com.fijimf.deepfij" %% "fijbook-schedule" % "1.0.2f"
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.0"),
