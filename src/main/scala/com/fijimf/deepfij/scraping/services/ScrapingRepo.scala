@@ -25,4 +25,22 @@ case class ScrapingRepo[F[_] : Sync](xa: Transactor[F]) extends AbstractScraping
      .transact(xa).exceptSql(ex => me.raiseError[ScrapeRequest](ex))
    def findScrapeRequestByLatestJob(season:Int, model:String): F[List[ScrapeRequest]] =
       ScrapeRequest.Dao.findByLatestScrape(season, model).to[List].transact(xa)
+
+   def findJob(jobId: Int) : F[Option[ScrapeJob]]=
+      ScrapeJob.Dao
+        .find(jobId)
+        .option
+        .transact(xa)
+        .exceptSql(ex=>me.raiseError[Option[ScrapeJob]](ex))
+
+
+   def findRequestByJobId(jobId: Int) : F[List[ScrapeRequest]]= {
+      ScrapeRequest.Dao
+        .findByScrapeJob(jobId)
+        .to[List]
+        .transact(xa)
+        .exceptSql(ex=>me.raiseError[List[ScrapeRequest]](ex))
+   }
+
+
 }

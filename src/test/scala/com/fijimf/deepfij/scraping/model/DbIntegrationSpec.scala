@@ -36,7 +36,7 @@ abstract class DbIntegrationSpec extends FunSpec with BeforeAndAfterAll with Mat
   }
 
   def createDockerContainer(docker: DockerClient): IO[String] = IO {
-    docker.pull("postgres:latest")
+    docker.pull("postgres:12.2")
 
     docker
       .listContainers(ListContainersParam.allContainers(true))

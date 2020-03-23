@@ -2,14 +2,30 @@ package com.fijimf.deepfij.scraping.model
 
 import java.time.LocalDateTime
 
+import cats.Applicative
+import cats.effect.Sync
 import doobie.implicits._
 import doobie.util.update.Update0
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import org.http4s.{EntityDecoder, EntityEncoder}
+import org.http4s.circe.{jsonEncoderOf, jsonOf}
 
 case class ScrapeJob(id: Long, updateOrFill: String, season: Int, model:String, startedAt: LocalDateTime, completedAt: Option[LocalDateTime]) {
 
 }
 
 object ScrapeJob {
+
+  implicit val scrapeJobEncoder: Encoder.AsObject[ScrapeJob] = deriveEncoder[ScrapeJob]
+  implicit val scrapeJobDecoder: Decoder[ScrapeJob] = deriveDecoder[ScrapeJob]
+  implicit def scrapeJobEntityEncoder[F[_] : Applicative]: EntityEncoder[F, ScrapeJob] = jsonEncoderOf
+  implicit def scrapeJobEntityDecoder[F[_] : Sync]: EntityDecoder[F, ScrapeJob] = jsonOf
+  implicit val scrapeListJobEncoder: Encoder.AsObject[List[ScrapeJob]] = deriveEncoder[List[ScrapeJob]]
+  implicit val scrapeListJobDecoder: Decoder[List[ScrapeJob]] = deriveDecoder[List[ScrapeJob]]
+  implicit def scrapeListJobEntityEncoder[F[_] : Applicative]: EntityEncoder[F, List[ScrapeJob]] = jsonEncoderOf
+  implicit def scrapeListJobEntityDecoder[F[_] : Sync]: EntityDecoder[F, List[ScrapeJob]] = jsonOf
+
 
   object Dao extends AbstractDao {
 
