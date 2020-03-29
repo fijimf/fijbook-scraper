@@ -30,12 +30,6 @@ object ScrapeRequest {
   implicit val scrapeRequestDecoder: Decoder[ScrapeRequest] = deriveDecoder[ScrapeRequest]
   implicit def scrapeRequestEntityEncoder[F[_] : Applicative]: EntityEncoder[F, ScrapeRequest] = jsonEncoderOf
   implicit def scrapeRequestEntityDecoder[F[_] : Sync]: EntityDecoder[F, ScrapeRequest] = jsonOf
-//  implicit val scrapeListRequestEncoder: Encoder.AsObject[List[ScrapeRequest]] = deriveEncoder[List[ScrapeRequest]]
-//  implicit val scrapeListRequestDecoder: Decoder[List[ScrapeRequest]] = deriveDecoder[List[ScrapeRequest]]
-//  implicit def scrapeListRequestEntityEncoder[F[_] : Applicative]: EntityEncoder[F, List[ScrapeRequest]] = jsonEncoderOf
-//  implicit def scrapeListRequestEntityDecoder[F[_] : Sync]: EntityDecoder[F, List[ScrapeRequest]] = jsonOf
-
-
 
   object Dao extends AbstractDao {
 
