@@ -2,9 +2,12 @@ package com.fijimf.deepfij.scraping.model
 
 import java.time.LocalDateTime
 
+import cats.data.NonEmptyList
+import com.fijimf.deepfij.scraping.model.ScrapeJob.JobsFilter
+
 class DoobieTypecheckSpec extends DbIntegrationSpec {
   val containerName = "doobie-typecheck-spec"
-  val port="17374"
+  val port = "17374"
 
   describe("Doobie typechecking Dao's") {
     describe("ScrapeJob.Dao") {
@@ -22,6 +25,15 @@ class DoobieTypecheckSpec extends DbIntegrationSpec {
 
       it("findBySeason should typecheck") {
         check(ScrapeJob.Dao.findBySeason(2020))
+      }
+
+      it("findByFilter should typecheck") {
+        check(ScrapeJob.Dao.findByFilter(JobsFilter(None, None, None)))
+        check(ScrapeJob.Dao.findByFilter(JobsFilter(Some(NonEmptyList.of(2017, 2018)), None, None)))
+        check(ScrapeJob.Dao.findByFilter(JobsFilter(None, Some("Casablanca"), None)))
+        check(ScrapeJob.Dao.findByFilter(JobsFilter(None, None, Some(true))))
+        check(ScrapeJob.Dao.findByFilter(JobsFilter(None, Some("Casablanca"), Some(true))))
+        check(ScrapeJob.Dao.findByFilter(JobsFilter(Some(NonEmptyList.of(2017, 2018)), None, Some(true))))
       }
 
       it("delete should typecheck") {

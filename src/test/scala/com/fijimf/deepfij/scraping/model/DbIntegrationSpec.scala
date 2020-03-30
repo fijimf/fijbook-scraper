@@ -60,7 +60,7 @@ abstract class DbIntegrationSpec extends FunSpec with BeforeAndAfterAll with Mat
     val containerConfig: ContainerConfig = ContainerConfig
       .builder
       .hostConfig(hostConfig)
-      .image("postgres:latest")
+      .image("postgres:12.2")
       .exposedPorts(s"$port/tcp")
       .env(s"POSTGRES_USER=$user", s"POSTGRES_PASSWORD=$password", s"POSTGRES_DB=$database")
       .build

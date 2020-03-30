@@ -27,7 +27,7 @@ object ScrapingServer {
     val scrapingService: HttpRoutes[F] = ScrapingRoutes.scrapeRoutes(scraper)
     val healthcheckService: HttpRoutes[F] = ScrapingRoutes.healthcheckRoutes(scraper, repo)
     val jobsService: HttpRoutes[F] = ScrapingRoutes.jobRoutes(repo)
-    val httpApp: HttpApp[F] = (healthcheckService <+> scrapingService).orNotFound
+    val httpApp: HttpApp[F] = (healthcheckService <+> scrapingService <+> jobsService).orNotFound
     val finalHttpApp: HttpApp[F] = Logger.httpApp[F](logHeaders = true, logBody = true)(httpApp)
 
 

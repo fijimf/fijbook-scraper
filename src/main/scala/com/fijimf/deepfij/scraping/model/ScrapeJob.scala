@@ -3,13 +3,14 @@ package com.fijimf.deepfij.scraping.model
 import java.time.LocalDateTime
 
 import cats.Applicative
+import cats.data.NonEmptyList
 import cats.effect.Sync
 import doobie.implicits._
 import doobie.util.update.Update0
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import org.http4s.{EntityDecoder, EntityEncoder}
+import io.circe.{Decoder, Encoder}
 import org.http4s.circe.{jsonEncoderOf, jsonOf}
+import org.http4s.{EntityDecoder, EntityEncoder}
 
 case class ScrapeJob(id: Long, updateOrFill: String, season: Int, model:String, startedAt: LocalDateTime, completedAt: Option[LocalDateTime]) {
 
@@ -26,6 +27,7 @@ object ScrapeJob {
   implicit def scrapeListJobEntityEncoder[F[_] : Applicative]: EntityEncoder[F, List[ScrapeJob]] = jsonEncoderOf
   implicit def scrapeListJobEntityDecoder[F[_] : Sync]: EntityDecoder[F, List[ScrapeJob]] = jsonOf
 
+  case class JobsFilter(years:Option[NonEmptyList[Int]], model:Option[String], completed:Option[Boolean])
 
   object Dao extends AbstractDao {
 
@@ -46,6 +48,15 @@ object ScrapeJob {
     def find(id: Long): doobie.Query0[ScrapeJob] = (baseQuery ++ fr" WHERE id = $id").query[ScrapeJob]
 
     def findBySeason(season: Int): doobie.Query0[ScrapeJob] = (baseQuery ++ fr" WHERE season = $season").query[ScrapeJob]
+
+    def findByFilter(filter: JobsFilter): doobie.Query0[ScrapeJob] = {
+      import doobie.util.fragments._
+      (baseQuery ++ whereAndOpt(
+        filter.model.map(m => fr" model = $m"),
+        filter.years.map(ys => in(fr" season",ys)),
+        filter.completed.map(_ => fr" completed_at is not null")
+      )).query[ScrapeJob]
+    }
 
     def list(): doobie.Query0[ScrapeJob] = baseQuery.query[ScrapeJob]
 
