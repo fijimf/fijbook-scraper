@@ -54,7 +54,7 @@ object ScrapeJob {
       (baseQuery ++ whereAndOpt(
         filter.model.map(m => fr" model = $m"),
         filter.years.map(ys => in(fr" season",ys)),
-        filter.completed.map(_ => fr" completed_at is not null")
+        filter.completed.map(p => if (p) fr" completed_at is not null" else fr" completed_at is null")
       )).query[ScrapeJob]
     }
 

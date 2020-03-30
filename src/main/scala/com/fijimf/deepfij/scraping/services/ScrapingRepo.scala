@@ -2,6 +2,7 @@ package com.fijimf.deepfij.scraping.services
 
 import cats.MonadError
 import cats.effect.Sync
+import com.fijimf.deepfij.scraping.model.ScrapeJob.JobsFilter
 import com.fijimf.deepfij.scraping.model.{ScrapeJob, ScrapeRequest}
 import doobie.implicits._
 import doobie.util.transactor.Transactor
@@ -33,6 +34,12 @@ case class ScrapingRepo[F[_] : Sync](xa: Transactor[F]) extends AbstractScraping
         .transact(xa)
         .exceptSql(ex=>me.raiseError[Option[ScrapeJob]](ex))
 
+   def findJobsByFilter(f: JobsFilter) : F[List[ScrapeJob]]=
+      ScrapeJob.Dao
+        .findByFilter(f)
+        .to[List]
+        .transact(xa)
+        .exceptSql(ex=>me.raiseError[List[ScrapeJob]](ex))
 
    def findRequestByJobId(jobId: Int) : F[List[ScrapeRequest]]= {
       ScrapeRequest.Dao
